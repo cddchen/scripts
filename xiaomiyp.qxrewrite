@@ -1,0 +1,3 @@
+^https:\/\/m\.xiaomiyoupin\.com\/api\/auth\/login\/isloggedin url script-request-header https://raw.githubusercontent.com/dompling/Script/master/xiaomiyp/xiaomiyp.cookie.js
+
+hostname = m.xiaomiyoupin.com
