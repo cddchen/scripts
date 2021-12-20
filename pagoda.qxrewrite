@@ -1,0 +1,3 @@
+^https:\/\/wx-mini.pagoda.com.cn\/api\/v1\/wxmini\/signIn\/customer url script-request-header https://raw.githubusercontent.com/chavyleung/scripts/master/pagoda/pagoda.cookie.js
+
+hostname = wx-mini.pagoda.com.cn
