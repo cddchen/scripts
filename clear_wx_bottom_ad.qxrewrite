@@ -1,3 +1,4 @@
-^https?://mp.weixin.qq.com/mp/getappmsgad url script-response-body http://api.170312.xyz/addid?url=https://Choler.github.io/Surge/Script/WeChat.js&id=0B9CBB085C99&id=0B9CBB08z
-
-hostname = mp.weixin.qq.com/mp/getappmsgad
+[rewrite_local]
+^https?:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgad url script-response-body https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/File/Wechat.js
+[mitm]
+hostname = mp.weixin.qq.com
