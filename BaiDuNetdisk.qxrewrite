@@ -1,0 +1,4 @@
+# BaiDu NetDisk
+^https?:\/\/pan\.baidu\.com\/rest\/2\.0\/membership\/user url script-response-body https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/BaiDuWangPan.js
+
+hostname = pan.baidu.com
