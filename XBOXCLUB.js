@@ -29,7 +29,7 @@ function getHeaders() {
 function sign() {
   const signurlVal = $.getData($.signurlKey)
   const signheaderVal = $.getData($.signheaderKey)
-  const signbodyVal = $.getdata($.signbodyKey)
+  const signbodyVal = $.getData($.signbodyKey)
   $.log(`${$.name}, data: ${signurlVal}, ${signheaderVal}, ${signbodyVal}`)
   if (!signurlVal || !signheaderVal || !signbodyVal) {
     $.msg($.name, `请先获取Cookie!`)
