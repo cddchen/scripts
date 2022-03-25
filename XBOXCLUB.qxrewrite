@@ -1,0 +1,4 @@
+# XBOXCLUB
+^https?:\/\/h5\.youzan\.com\/wscump\/checkin\/checkinV2\.json\? url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/XBOXCLUB.js
+
+hostname = h5.youzan.com
