@@ -2,7 +2,6 @@
 const $ = new Env('XBOX俱乐部')
 $.signurlKey = 'signurl_xbox'
 $.signheaderKey = 'signheader_xbox'
-$.signbodyKey = 'signbody_xbox'
 
 let isGetCookie = typeof $request !== 'undefined'
 
@@ -20,7 +19,6 @@ function getHeaders() {
 
     if (signurlVal) $.setData(signurlVal, $.signurlKey)
     if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
-    if (signbodyVal) $.setData(signbodyVal, $.signbodyKey)
     $.msg($.name, `获取Cookie：成功！`)
   }
   $.done()
@@ -29,14 +27,13 @@ function getHeaders() {
 function sign() {
   const signurlVal = $.getData($.signurlKey)
   const signheaderVal = $.getData($.signheaderKey)
-  const signbodyVal = $.getData($.signbodyKey)
-  $.log(`${$.name}, data: ${signurlVal}, ${signheaderVal}, ${signbodyVal}`)
-  if (!signurlVal || !signheaderVal || !signbodyVal) {
+  $.log(`${$.name}, data: ${signurlVal}, ${signheaderVal}`)
+  if (!signurlVal || !signheaderVal) {
     $.msg($.name, `请先获取Cookie!`)
     $.done()
     return
   }
-  const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
+  const url = { url: signurlVal, headers: JSON.parse(signheaderVal) }
   $.get(url, (error, response, data) => {
     $.log(`${$.name}, data: ${data}`)
     let result = JSON.parse(data)
