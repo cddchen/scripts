@@ -1,5 +1,8 @@
+[MITM]
+i.meituan.com
+
+[rewrite_local]
 ^https:\/\/i.meituan.com\/evolve\/signin\/signpost\/ url script-request-header https://raw.githubusercontent.com/chavyleung/scripts/master/meituan/meituan.cookie.js
 
-hostname = i.meituan.com
-
-//0 2 0 * * * https://raw.githubusercontent.com/chavyleung/scripts/master/meituan/meituan.js, tag=美团签到, img-url=https://raw.githubusercontent.com/anker1209/icon/main/mt.png, enabled=true
+[task_local]
+0 2 0 * * * https://raw.githubusercontent.com/chavyleung/scripts/master/meituan/meituan.js, tag=美团签到, img-url=https://raw.githubusercontent.com/anker1209/icon/main/mt.png, enabled=true
