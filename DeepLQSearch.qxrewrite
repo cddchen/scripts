@@ -1,0 +1,1 @@
+^https:\/\/duckduckgo.com\/\?q=dlc(\+|%20)([^&]+).+ url script-echo-response https://raw.githubusercontent.com/zZPiglet/Task/master/asset/DeepLQ-search.js
