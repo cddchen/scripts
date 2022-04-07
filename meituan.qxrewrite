@@ -1,0 +1,5 @@
+MITM]
+hostname = i.meituan.com
+
+[Script]
+^https:\/\/i.meituan.com\/evolve\/signin\/signpost\/ url script-request-header https://raw.githubusercontent.com/chavyleung/scripts/master/meituan/meituan.cookie.js
