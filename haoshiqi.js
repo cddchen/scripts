@@ -2,7 +2,7 @@
 const $ = new Env('好食期')
 $.signurlKey = 'signurl_haoshiqi'
 $.signheaderKey = 'signheader_haoshiqi'
-$.signbodyVal = 'signbody_haoshiqi'
+#$.signbodyVal = 'signbody_haoshiqi'
 
 let isGetCookie = typeof $request !== 'undefined'
 
@@ -16,11 +16,11 @@ function getHeaders() {
   if ($request) {
     const signurlVal = $request.url
     const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = $request.body
+    #const signbodyVal = $request.body
 
     if (signurlVal) $.setData(signurlVal, $.signurlKey)
     if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
-    if (signbodyVal) $.setData(signbodyVal, $.signbodyVal)
+    #if (signbodyVal) $.setData(signbodyVal, $.signbodyVal)
     $.msg($.name, `获取Cookie：成功！`)
   }
   $.done()
@@ -29,18 +29,18 @@ function getHeaders() {
 function sign() {
   const signurlVal = $.getData($.signurlKey)
   const signheaderVal = $.getData($.signheaderKey)
-  const signbodyVal = $.getData($.signbodyVal)
-  $.log(`${$.name}, url: ${signurlVal}, header: ${signheaderVal}, body: ${signbodyVal}`)
-  if (!signurlVal || !signheaderVal || !signbodyVal) {
+  #const signbodyVal = $.getData($.signbodyVal)
+  $.log(`${$.name}, url: ${signurlVal}, header: ${signheaderVal}`)
+  if (!signurlVal || !signheaderVal) {
     $.msg($.name, `请先获取Cookie!`)
     $.done()
     return
   }
-  const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
+  const url = { url: signurlVal, headers: JSON.parse(signheaderVal) }
   $.post(url, (error, response, data) => {
     $.log(`${$.name}, data: ${data}`)
     let result = JSON.parse(data)
-    let subTitle = `结果：${result.msg}`
+    let subTitle = `结果：${result.errmsg}`
     $.msg($.name, subTitle)
     $.done()
   })
