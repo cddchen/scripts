@@ -1,0 +1,4 @@
+# haoshiqi
+^https:\/\/m\.api\.haoshiqi\.net\/task\/finishtaskreport? url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/haoshiqi.js
+
+hostname = m.api.haoshiqi.net
