@@ -1,0 +1,4 @@
+#Pdfexpert
+^https:\/\/license\.pdfexpert\.com\/api\/1\.0\/pdfexpert6\/subscription\/refresh$ url script-response-body https://raw.githubusercontent.com/chankanzu/Quan-X-1.3/master/Pdfexpert.vip.js
+
+hostname = license.pdfexpert.com
