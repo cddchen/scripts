@@ -6,5 +6,9 @@ obj.entities[0].step.assignTime = 1651218681
 obj.entities[0].step.actionTime = 1651218681
 obj.entities[0].step.renderTime = 1651218681
 
+obj.entities[0].data.fieldSQSJ = 1651218681
+obj.entities[0].data.fieldSHFDYShsj = 1651218681
+obj.entities[0].data._VAR_TODAY = 1651218681
+obj.entities[0].data.fieldSQJCRQ = 1651218681
 
 $done({body: JSON.stringify(obj)});
