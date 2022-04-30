@@ -25,7 +25,7 @@ if (strDate >= 0 && strDate <= 9) {
    strDate = "0" + strDate;
 }
 // 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
-var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
+var nowDate = now.getFullYear() + seperator + nowMonth + seperator + strDate;
 obj.entities[0].data.fieldSHZT = nowDate
 obj.entities[0].data.fieldSQSJ = time
 
