@@ -2,7 +2,7 @@
 const referer = `http://task.njust.edu.cn/infoplus/form/14478876/render`
 var obj = JSON.parse($response.body);
 var now = new Date();
-now.setHours(15, 43)
+now.setHours(9, 43)
 const time = now.getTime()/1000
 
 obj.entities[0].create = time
