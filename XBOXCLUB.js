@@ -15,7 +15,7 @@ function getHeaders() {
   if ($request) {
     const signurlVal = $request.url
     const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = $request.body
+    const signbodyVal = JSON.stringify($request.body)
 
     if (signurlVal) $.setData(signurlVal, $.signurlKey)
     if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
@@ -37,7 +37,7 @@ function sign() {
   $.get(url, (error, response, data) => {
     $.log(`${$.name}, data: ${data}`)
     let result = JSON.parse(data)
-    let subTitle = `结果：${result.msg}`
+    let subTitle = `结果：${result.msg}，${result.data.desc}`
     $.msg($.name, subTitle)
     $.done()
   })
