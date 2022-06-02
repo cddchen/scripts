@@ -16,7 +16,7 @@ function getHeaders() {
   if ($request) {
     const signurlVal = $request.url
     const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = $request.body;
+    const signbodyVal = JSON.stringify($request.body);
     $.log(`${JSON.stringify($request)}`)
 
     if (signurlVal) $.setData(signurlVal, $.signurlKey)
