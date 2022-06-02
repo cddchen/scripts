@@ -1,4 +1,4 @@
 # hellobike coin
-^https:\/\/api\.hellobike\.com\/api\?common\.welfare\.signAndRecommend url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/hellobike_coin.js
+^https:\/\/api\.hellobike\.com\/api\?common\.welfare\.signAndRecommend url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/hellobike_coin.js
 
 hostname = api.hellobike.com
