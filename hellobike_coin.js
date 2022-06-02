@@ -41,48 +41,10 @@ function sign() {
   $.post(url, (error, response, data) => {
     $.log(`${$.name}, data: ${data}`)
     let result = JSON.parse(data)
-    let subTitle = `结果：获得奖励金${result.bountyCountToday}, ${result.title}`
+    let subTitle = `结果：获得奖励金${result.data.bountyCountToday}, ${result.data.title}`
     $.msg($.name, subTitle)
     $.done()
   })
-}
-
-function FormDataToObject(form, contentType) {
-  const boundary = contentType.split("; ")[1].split("=")[1];
-  const splitBoundary = `--${boundary}`;
-  const index = form.indexOf(splitBoundary);
-  form = form.substr(index);
-  const lastIndex = form.lastIndexOf(splitBoundary);
-  form = form.substring(0, lastIndex);
-  const array = compact(form.split(splitBoundary)).map((a) => {
-    const entity = compact(a.split("\r\n"));
-    const regex = /Content-Disposition: form-data; name="(.*)"/;
-    var matchs = regex.exec(entity[0]);
-    return {
-      name: matchs[1],
-      value: entity[1],
-    };
-  });
-
-  function compact(array) {
-    let resIndex = 0;
-    const result = [];
-    if (array == null) {
-      return result;
-    }
-    for (const value of array) {
-      if (value) {
-        result[resIndex++] = value;
-      }
-    }
-    return result;
-  }
-
-  const result = {};
-  array.forEach((a) => {
-    result[a.name] = a.value;
-  });
-  return result;
 }
 
 function Env(name, opts) {
