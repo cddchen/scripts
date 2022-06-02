@@ -4,7 +4,7 @@ $.signurlKey = 'signurl_hellobike_coin'
 $.signheaderKey = 'signheader_hellobike_coin'
 $.signbodyKey = 'signbody_hellobike_coin'
 
-let isGetCookie = typeof $request !== 'undefined'
+let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIONS'
 
 if (isGetCookie) {
   getHeaders()
