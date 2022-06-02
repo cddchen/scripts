@@ -1,0 +1,4 @@
+# xiaojukeji coin
+^https:\/\/htwkop\.xiaojukeji\.com\/gateway\?api=prado\.play\.common\.facade\.component\&.* url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/xiaojukeji.js
+
+hostname = htwtop.xiaojukeji.com
