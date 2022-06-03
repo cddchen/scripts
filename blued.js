@@ -9,7 +9,7 @@ for (var obj in objc.data[0].vip_split) {
     objc.data[0].vip_split[obj] = 1
 }
 objc.data[0].hide_vip_price = 1
-
+this.log(objc)
 $done({
     body : JSON.stringify(objc)
 });
