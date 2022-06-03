@@ -8,7 +8,6 @@ objc.data[0].live_tabs = []
 for (var obj in objc.data[0].vip_split) {
     objc.data[0].vip_split[obj] = 1
 }
-objc.data[0].tt_promotion.open = 0
 objc.data[0].hide_vip_price = 1
 
 $done({
