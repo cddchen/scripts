@@ -14,7 +14,7 @@ objc.data[0].ad_close_pop = 0
 objc.data[0].nearby_recommend_live_ui = 0
 objc.data[0].is_nearby_live_play_disable = 1
 
-console.log(objc)
+objc = JSON.stringify(objc)
 $done({
-    body : JSON.stringify(objc)
+    body : objc
 });
