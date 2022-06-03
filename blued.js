@@ -15,6 +15,7 @@ objc.data[0].nearby_recommend_live_ui = 0
 objc.data[0].is_nearby_live_play_disable = 1
 
 objc = JSON.stringify(objc)
+console.log(objc)
 $done({
     body : objc
 });
