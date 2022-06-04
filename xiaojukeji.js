@@ -39,12 +39,12 @@ function sign() {
   }
   const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
   $.post(url, (error, response, data) => {
-    $.log(`${$.name}, data: ${data}`)
+    // $.log(`${$.name}, data: ${data}`)
     let result = JSON.parse(data)
     let subTitle = `结果：${result.data.result}, 获得${result.data.dailySignReward.rightCount}`
     $.msg($.name, subTitle)
-    $.done()
   })
+  $.done()
 }
 
 function Env(name, opts) {
