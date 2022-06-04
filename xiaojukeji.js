@@ -41,7 +41,7 @@ function sign() {
   $.post(url, (error, response, data) => {
     // $.log(`${$.name}, data: ${data}`)
     let result = JSON.parse(data)
-    let subTitle = `结果：${result.data.result}, 获得${result.data.dailySignReward.rightCount}`
+    let subTitle = `结果：${result.data.data.result}, 获得${result.data.data.dailySignReward.rightCount}`
     $.msg($.name, subTitle)
   })
   $.done()
