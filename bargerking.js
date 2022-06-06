@@ -5,14 +5,14 @@ $.signKey = 'session_bargerking'
 const signbody = `activityCode=VIVJDKE8P2OVJK&taskCode=CTASK0002`
 const synthesisbody = `activityCode=VIVJDKE8P2OVJK`
 
-let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIONS'
+let isGetCookie = typeof $request !== 'undefined'
 
 if (isGetCookie) {
     !(async () => {
         const session = {}
         session.url = $request.url;
         session.headers = $request.headers;
-        if ($.setdata(JSON.stringify(session), $.signKey)) {
+        if ($.setData(JSON.stringify(session), $.signKey)) {
           $.subt = `获取会话: 成功!`
         } else {
           $.subt = `获取会话: 失败!`
@@ -22,13 +22,23 @@ if (isGetCookie) {
       .catch((e) => $.logErr(e))
       .finally(() => $.done())
 } else {
-    await sign();
-    await synthesis();
+    if (!$.getData($.signKey)) {
+        $.msg($.name, `请先获取Cookie!`)
+        $.done()
+    }
+    else {
+        !(async () => {
+            await sign();
+            await synthesis();
+          })()
+          .catch((e) => $.logErr(e))
+          .finally(() => $.done())
+    }   
 }
 
 function sign() {
     return new Promise((resolve) => {
-        signheaders = JSON.parse($.getdata($.signKey)).headers;
+        signheaders = JSON.parse($.getData($.signKey)).headers;
         
         const url = { 
            url: 'http://scrm.bkchina.cn/scrm-bk-wechat/activityController/collectCardTask.do',
@@ -61,7 +71,7 @@ function sign() {
 
 function synthesis() {
     return new Promise((resolve) => {
-        signheaders = JSON.parse($.getdata($.signKey)).headers;
+        signheaders = JSON.parse($.getData($.signKey)).headers;
         
         const url = { 
            url: 'http://scrm.bkchina.cn/scrm-bk-wechat/activityController/drawCollectCard.do',
