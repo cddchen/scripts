@@ -92,7 +92,7 @@ function synthesis() {
           try {
             // console.log(data);
             let result = JSON.parse(data)
-            $.msg($.name, `${result.message}`, 获得`${result.data.awardCard.cardName}`)
+            $.msg($.name, `${result.message}`, `获得${result.data.awardCard.cardName}`)
           } catch (e) {
             $.logErr(e, resp)
           } finally {
