@@ -7,44 +7,51 @@ $.signbodyKey = 'signbody_xiaojukeji_coin'
 let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIONS'
 
 if (isGetCookie) {
-  getHeaders()
+    !(async () => {
+        const signurlVal = $request.url
+        const signheaderVal = JSON.stringify($request.headers)
+        const signbodyVal = $request.body;
+
+        if (signurlVal) $.setData(signurlVal, $.signurlKey)
+        if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
+        if (signbodyVal) $.setData(signbodyVal, $.signbodyKey)
+        $.msg($.name, `获取Cookie：成功！`)
+      })()
+      .catch((e) => $.logErr(e))
+      .finally(() => $.done())
 } else {
-  sign()
-}
-
-function getHeaders() {
-  if ($request) {
-    const signurlVal = $request.url
-    const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = $request.body;
-    $.log(`${JSON.stringify($request)}`)
-
-    if (signurlVal) $.setData(signurlVal, $.signurlKey)
-    if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
-    if (signbodyVal) $.setData(signbodyVal, $.signbodyKey)
-    $.msg($.name, `获取Cookie：成功！`)
-  }
-  $.done()
+    if (!$.getData($.signKey)) {
+        $.msg($.name, `请先获取Cookie!`)
+        $.done()
+    }
+    else {
+      !(async () => {
+          await sign();
+        })()
+        .catch((e) => $.logErr(e))
+        .finally(() => $.done())
+    }   
 }
 
 function sign() {
-  const signurlVal = $.getData($.signurlKey)
-  const signheaderVal = $.getData($.signheaderKey)
-  const signbodyVal = $.getData($.signbodyKey)
-  $.log(`${$.name}, data: ${signurlVal}, ${signheaderVal}`)
-  if (!signurlVal || !signheaderVal || !signbodyVal) {
-    $.msg($.name, `请先获取Cookie!`)
-    $.done()
-    return
-  }
-  const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
-  $.post(url, (error, response, data) => {
-    // $.log(`${$.name}, data: ${data}`)
-    let result = JSON.parse(data)
-    let subTitle = `结果：${result.data.data.result}, 获得${result.data.data.dailySignReward.rightCount}`
-    $.msg($.name, subTitle)
-  })
-  $.done()
+    return new Promise((resolve) => {
+      const signurlVal = $.getData($.signurlKey)
+      const signheaderVal = $.getData($.signheaderKey)
+      const signbodyVal = $.getData($.signbodyKey)
+      const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
+      //console.log(JSON.stringify(url));
+      $.post(url,(err, resp, data)=> { 
+        try {
+          // console.log(data);
+          let result = JSON.parse(data)
+          $.msg($.name, `${result.data.data.result}`, `${result.data.data.dailySignReward.rightCount}`)
+        } catch (e) {
+          $.logErr(e, resp)
+        } finally {
+          resolve()
+        }
+      })
+    })
 }
 
 function Env(name, opts) {
