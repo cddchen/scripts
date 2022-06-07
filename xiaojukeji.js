@@ -36,7 +36,7 @@ function sign() {
     //console.log(JSON.stringify(url));
     $.post(url,(err, resp, data)=> { 
       try {
-        // console.log(data);
+        $.log(data)
         let result = JSON.parse(data)
         $.msg($.name, `${result.data.data.result}`, `${result.data.data.dailySignReward.rightCount}`)
       } catch (e) {
