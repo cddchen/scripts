@@ -7,44 +7,83 @@ $.signbodyKey = 'signbody_hellobike_coin'
 let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIONS'
 
 if (isGetCookie) {
-  getHeaders()
-} else {
-  sign()
-}
-
-function getHeaders() {
-  if ($request) {
+  !(async () => {
     const signurlVal = $request.url
     const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = JSON.stringify($request.body);
-    $.log(`${JSON.stringify($request)}`)
+    const signbodyVal = $request.body;
 
     if (signurlVal) $.setData(signurlVal, $.signurlKey)
     if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
     if (signbodyVal) $.setData(signbodyVal, $.signbodyKey)
     $.msg($.name, `获取Cookie：成功！`)
-  }
-  $.done()
+  })()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done())
+} else {
+  !(async () => {
+    await sign();
+  })()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done()) 
 }
 
 function sign() {
-  const signurlVal = $.getData($.signurlKey)
-  const signheaderVal = $.getData($.signheaderKey)
-  const signbodyVal = $.getData($.signbodyKey)
-  $.log(`${$.name}, data: ${signurlVal}, ${signheaderVal}`)
-  if (!signurlVal || !signheaderVal || !signbodyVal) {
-    $.msg($.name, `请先获取Cookie!`)
-    $.done()
-    return
-  }
-  const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: JSON.parse(signbodyVal) }
-  $.post(url, (error, response, data) => {
-    $.log(`${$.name}, data: ${data}`)
-    let result = JSON.parse(data)
-    let subTitle = `结果：获得奖励金${result.data.bountyCountToday}, ${result.data.title}`
-    $.msg($.name, subTitle)
-    $.done()
+  return new Promise((resolve) => {
+    const signurlVal = $.getData($.signurlKey)
+    const signheaderVal = $.getData($.signheaderKey)
+    const signbodyVal = $.getData($.signbodyKey)
+    const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: JSON.parse(signbodyVal) }
+    $.post(url,(err, resp, data)=> { 
+      try {
+        // $.log(data)
+        let result = JSON.parse(data)
+        $.msg($.name, `获得奖励金${result.bountyCountToday}`, `${result.title}`)
+      } catch (e) {
+        $.logErr(e, resp)
+        $.msg($.name, `签到出错啦`)
+      } finally {
+        resolve()
+      }
+    })
   })
+}
+
+function FormDataToObject(form, contentType) {
+  const boundary = contentType.split("; ")[1].split("=")[1];
+  const splitBoundary = `--${boundary}`;
+  const index = form.indexOf(splitBoundary);
+  form = form.substr(index);
+  const lastIndex = form.lastIndexOf(splitBoundary);
+  form = form.substring(0, lastIndex);
+  const array = compact(form.split(splitBoundary)).map((a) => {
+    const entity = compact(a.split("\r\n"));
+    const regex = /Content-Disposition: form-data; name="(.*)"/;
+    var matchs = regex.exec(entity[0]);
+    return {
+      name: matchs[1],
+      value: entity[1],
+    };
+  });
+
+  function compact(array) {
+    let resIndex = 0;
+    const result = [];
+    if (array == null) {
+      return result;
+    }
+    for (const value of array) {
+      if (value) {
+        result[resIndex++] = value;
+      }
+    }
+    return result;
+  }
+
+  const result = {};
+  array.forEach((a) => {
+    result[a.name] = a.value;
+  });
+  return result;
 }
 
 function Env(name, opts) {
