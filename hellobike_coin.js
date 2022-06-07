@@ -10,7 +10,7 @@ if (isGetCookie) {
   !(async () => {
     const signurlVal = $request.url
     const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = $request.body;
+    const signbodyVal = JSON.stringify($request.body);
 
     if (signurlVal) $.setData(signurlVal, $.signurlKey)
     if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
@@ -37,7 +37,7 @@ function sign() {
       try {
         // $.log(data)
         let result = JSON.parse(data)
-        $.msg($.name, `获得奖励金${result.bountyCountToday}`, `${result.title}`)
+        $.msg($.name, `获得奖励金${result.data.bountyCountToday}`, `${result.data.title}`)
       } catch (e) {
         $.logErr(e, resp)
         $.msg($.name, `签到出错啦`)
