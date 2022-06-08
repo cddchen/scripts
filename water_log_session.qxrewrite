@@ -1,0 +1,4 @@
+# XBOXCLUB
+^http://gx-app-server\.dcrym\.com\/dcxy\/api\/gx\/devices\/.*?/beginning$ url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/water_log_session.js
+
+hostname = gx-app-server.dcrym.com
