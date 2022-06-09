@@ -8,6 +8,7 @@ let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIO
 
 if (isGetCookie) {
   !(async () => {
+    $.log(JSON.stringify($request))
     const signurlVal = $request.url
     const signheaderVal = JSON.stringify($request.headers)
     const signbodyVal = JSON.stringify($request.body);
