@@ -5,19 +5,19 @@ $.signKey = 'session_mxbc'
 let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIONS'
 
 if (isGetCookie) {
-	!(async () => {
-		const session = {}
-		session.url = $request.url;
-		session.headers = $request.headers;
-		if ($.setData(JSON.stringify(session), $.signKey)) {
-			$.subt = `获取会话: 成功!`
-		} else {
-			$.subt = `获取会话: 失败!`
-		}
-		$.msg($.name, $.subt, '')
-		})()
-		.catch((e) => $.logErr(e))
-		.finally(() => $.done())
+  !(async () => {
+    const session = {}
+    session.url = $request.url;
+    session.headers = $request.headers;
+    if ($.setData(JSON.stringify(session), $.signKey)) {
+      $.subt = `获取会话: 成功!`
+    } else {
+      $.subt = `获取会话: 失败!`
+    }
+    $.msg($.name, $.subt, '')
+    })()
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
 } else {
 	!(async () => {
 		await sign();
@@ -27,29 +27,29 @@ if (isGetCookie) {
 }
 
 function sign() {
-	return new Promise((resolve) => {
-		signheaders = JSON.parse($.getData($.signKey)).headers;
-		var signurl = JSON.parse($.getData($.signKey)).url
-		signurl = signurl.replace(`t=\d*`, `t=${Date.parse(new Date())}`)
-		
-		const url = { url: signurl, headers: signheaders }
-		$.post(url,(err, resp, data)=> {
-			try {
-				let result = JSON.parse(data)
-				if (result.msg == "") {
-					$.msg($.name, `签到成功`, `获得${result.data.ruleValuePoint}个币`)
-				}
-				else {
-					$.msg($.name, `签到出错`, `${result.msg}`)
-				}
-			} catch (e) {
-				$.logErr(e, resp)
-				$.msg($.name, `出错啦！`)
-			} finally {
-				resolve()
-			}
-		})
-	})
+  return new Promise((resolve) => {
+    signheaders = JSON.parse($.getData($.signKey)).headers;
+    var signurl = JSON.parse($.getData($.signKey)).url
+    signurl = signurl.replace(`t=\d*`, `t=${Date.parse(new Date())}`)
+    
+    const url = { url: signurl, headers: signheaders }
+    $.post(url,(err, resp, data)=> {
+      try {
+        let result = JSON.parse(data)
+        if (result.msg == "") {
+          $.msg($.name, `签到成功`, `获得${result.data.ruleValuePoint}个币`)
+        }
+        else {
+          $.msg($.name, `签到出错`, `${result.msg}`)
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+        $.msg($.name, `出错啦！`)
+      } finally {
+        resolve()
+      }
+    })
+  })
 }
 
 function Env(name, opts) {
