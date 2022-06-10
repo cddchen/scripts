@@ -33,8 +33,8 @@ function sign() {
 		
 		const url = { url: signurl, headers: signheaders }
 		$.post(url,(err, resp, data)=> { 
+			$.log(data)
 			try {
-				$.log(data)
 				let result = JSON.parse(data)
 				if (result.msg == "") {
 					$.msg($.name, `签到成功`, `获得${result.data.ruleValuePoint}个币`)
@@ -42,7 +42,6 @@ function sign() {
 				else {
 					$.msg($.name, `签到出错`, `${result.msg}`)
 				}
-				
 			} catch (e) {
 				$.logErr(e, resp)
 				$.msg($.name, `出错啦！`)
