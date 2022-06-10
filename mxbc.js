@@ -30,11 +30,11 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
     const signheaders = JSON.parse($.getData($.signKey)).headers;
-    var signurl = JSON.parse($.getData($.signKey)).url
-    signurl = signurl.replace(`t=\d*`, `t=${Date.parse(new Date())}`)
+    var signurl = JSON.parse($.getData($.signKey)).url.replace(/t=\d*/, `t=${Date.parse(new Date())}`)
     
     const url = { url: signurl, headers: signheaders }
-    $.post(url,(err, resp, data)=> {
+    $.get(url,(err, resp, data)=> {
+      $.log(data)
       try {
         let result = JSON.parse(data)
         if (result.msg == "") {
