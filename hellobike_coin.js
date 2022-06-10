@@ -33,7 +33,11 @@ function sign() {
     const signurlVal = $.getData($.signurlKey)
     const signheaderVal = $.getData($.signheaderKey)
     const signbodyVal = $.getData($.signbodyKey)
-    const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: JSON.parse(signbodyVal) }
+
+    var header = JSON.parse(signheaderVal)
+    header["x-mmtc-timestamp"] = Date.parse(new Date())
+    
+    const url = { url: signurlVal, headers: header, body: JSON.parse(signbodyVal) }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
