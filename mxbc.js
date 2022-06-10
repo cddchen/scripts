@@ -6,6 +6,7 @@ let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIO
 
 if (isGetCookie) {
   !(async () => {
+    $.log(JSON.stringify($request))
     const session = {}
     session.url = $request.url;
     session.headers = $request.headers;
@@ -19,16 +20,16 @@ if (isGetCookie) {
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
 } else {
-	!(async () => {
-		await sign();
-	})()
-	.catch((e) => $.logErr(e))
-	.finally(() => $.done()) 
+  !(async () => {
+    await sign();
+  })()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done()) 
 }
 
 function sign() {
   return new Promise((resolve) => {
-    signheaders = JSON.parse($.getData($.signKey)).headers;
+    const signheaders = JSON.parse($.getData($.signKey)).headers;
     var signurl = JSON.parse($.getData($.signKey)).url
     signurl = signurl.replace(`t=\d*`, `t=${Date.parse(new Date())}`)
     
