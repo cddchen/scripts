@@ -34,7 +34,7 @@ function sign() {
 		const url = { url: signurl, headers: signheaders }
 		$.post(url,(err, resp, data)=> { 
 			try {
-				// $.log(data)
+				$.log(data)
 				let result = JSON.parse(data)
 				if (result.msg == "") {
 					$.msg($.name, `签到成功`, `获得${result.data.ruleValuePoint}个币`)
