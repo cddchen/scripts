@@ -38,7 +38,12 @@ function sign() {
       try {
         // $.log(data)
         let result = JSON.parse(data)
-        $.msg($.name, `${result.data.data.result}`, `${result.data.data.dailySignReward.rightCount}`)
+        if (result.data.data.result) {
+          $.msg($.name, `签到成功`, `获得${result.data.data.dailySignReward.rightCount}个奖励金`)
+        }
+        else {
+          $.msg($.name, `签到失败`, `${result.data.msg}`)
+        }
       } catch (e) {
         $.logErr(e, resp)
         let result = JSON.parse(data)
