@@ -39,8 +39,8 @@ function sign() {
 
     const url = {
       url: session.url,
-      headers: signheaders,
-      body: signbody
+      headers: session.headers,
+      body: session.body
     }
     //console.log(JSON.stringify(url));
     $.post(url, (err, resp, data) => {
