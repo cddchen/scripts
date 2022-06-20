@@ -9,8 +9,8 @@ if (isGetCookie) {
   !(async () => {
     const session = {}
     session.url = $request.url;
-    session.headers = JSON.stringify($request.headers);
-    session.body = '{"' + decodeURI($request.body).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}';
+    session.headers = $request.headers;
+    session.body = JSON.parse('{"' + decodeURI($request.body).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
     if ($.setData(JSON.stringify(session), $.signKey)) {
         $.subt = `获取会话: 成功!`
@@ -25,13 +25,13 @@ if (isGetCookie) {
 } else {
   !(async () => {
     await sign();
-    await signin_info();
-    if (signin_info_cnt == 1 || signin_info_cnt == 5 || signin_info_cnt == 14) {
-        await signin_gift();
-    }
-    else if (signin_info_cnt == 25) {
-        $.msg($.name, `提醒⏰`, `已签到25天，可以抽奖啦～`)
-    }
+    // await signin_info();
+    // if (signin_info_cnt == 1 || signin_info_cnt == 5 || signin_info_cnt == 14) {
+    //     await signin_gift();
+    // }
+    // else if (signin_info_cnt == 25) {
+    //     $.msg($.name, `提醒⏰`, `已签到25天，可以抽奖啦～`)
+    // }
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done()) 
@@ -40,9 +40,8 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
     const session = JSON.parse($.getData($.signKey))
-    var body = JSON.parse(session.body)
     
-    const url = { url: session.url, headers: JSON.parse(session.headers), body: `id=${body.id}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}` }
+    const url = { url: session.url, headers: JSON.parse(session.headers), body: `id=${session.body.id}&timestamp=${Date.now()}&app_key=${session.body.app_key}&u_session=${session.body.u_session}&sign=${signbody.sign}` }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
@@ -66,8 +65,8 @@ function sign() {
 function signin_info() {
     return new Promise((resolve) => {
         const session = JSON.parse($.getData($.signKey))
-        body = `id=${body.id}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}`
-        const signurl = `https://api2.luolai.tech/vshop/api/signin/info?id=${body.id}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}`
+        signbody = JSON.parse(session.body)
+        const signurl = `https://api2.luolai.tech/vshop/api/signin/info?id=${signbody.id}&timestamp=${Date.now()}&app_key=${signbody.app_key}&u_session=${signbody.u_session}&sign=${signbody.sign}`
         
         const url = { url: signurl, headers: JSON.parse(session.headers) }
         $.get(url,(err, resp, data)=> { 
@@ -95,8 +94,8 @@ function signin_gift() {
     return new Promise((resolve) => {
         const session = JSON.parse($.getData($.signKey))
         const gift_id_map = {1: 136, 5: 137, 14: 138}
-        body = `id=${body.id}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}`
-        const signurl = `https://api2.luolai.tech/vshop/api/signin/gift/get?activity_id=${body.id}&gift_id=${gift_id_map[signin_info_cnt]}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}`
+        signbody = JSON.parse(session.body)
+        const signurl = `https://api2.luolai.tech/vshop/api/signin/gift/get?activity_id=${signbody.id}&gift_id=${gift_id_map[signin_info_cnt]}&timestamp=${Date.now()}&app_key=${signbody.app_key}&u_session=${signbody.u_session}&sign=${signbody.sign}`
         
         const url = { url: signurl, headers: JSON.parse(session.headers) }
         $.get(url,(err, resp, data)=> { 
