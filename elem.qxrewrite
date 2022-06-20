@@ -1,0 +1,3 @@
+https://h5.ele.me/restapi/biz.growth_finetune/v1/finetune/operate? url script-request-header https://raw.githubusercontent.com/leafTheFish/DeathNote/main/elm.js
+
+hostname = h5.ele.me
