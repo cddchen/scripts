@@ -18,7 +18,7 @@ if (isGetCookie) {
         $.subt = `获取会话: 失败!`
       }
       $.msg($.name, $.subt, '')
-      $.log(JSON.stringify($session))
+      $.log(JSON.stringify(session))
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
