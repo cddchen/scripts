@@ -1,0 +1,4 @@
+# XBOXCLUB
+^https:\/\/api2\.luolai\.tech\/vshop\/api\/signin$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/luolaijiafang.js
+
+hostname = api2.luolai.tech
