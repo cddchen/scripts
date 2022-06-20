@@ -7,7 +7,6 @@ var signin_info_cnt
 
 if (isGetCookie) {
   !(async () => {
-    $.log(JSON.stringify($request))
     const session = {}
     session.url = $request.url;
     session.headers = JSON.stringify($request.headers);
@@ -19,6 +18,7 @@ if (isGetCookie) {
         $.subt = `获取会话: 失败!`
       }
       $.msg($.name, $.subt, '')
+      $.log(JSON.stringify($session))
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -41,9 +41,8 @@ function sign() {
   return new Promise((resolve) => {
     const session = JSON.parse($.getData($.signKey))
     var body = JSON.parse(session.body)
-    body = `id=${body.id}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}`
     
-    const url = { url: session.url, headers: JSON.parse(session.headers), body: body }
+    const url = { url: session.url, headers: JSON.parse(session.headers), body: `id=${body.id}&timestamp=${Date.now()}&app_key=${body.app_key}&u_session=${body.u_session}&sign=${body.sign}` }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
