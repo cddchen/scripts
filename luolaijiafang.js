@@ -41,7 +41,7 @@ function sign() {
   return new Promise((resolve) => {
     const session = JSON.parse($.getData($.signKey))
     
-    const url = { url: session.url, headers: JSON.parse(session.headers), body: `id=${session.body.id}&timestamp=${Date.now()}&app_key=${session.body.app_key}&u_session=${session.body.u_session}&sign=${signbody.sign}` }
+    const url = { url: session.url, headers: session.headers, body: `id=${session.body.id}&timestamp=${Date.now()}&app_key=${session.body.app_key}&u_session=${session.body.u_session}&sign=${signbody.sign}` }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
@@ -65,10 +65,9 @@ function sign() {
 function signin_info() {
     return new Promise((resolve) => {
         const session = JSON.parse($.getData($.signKey))
-        signbody = JSON.parse(session.body)
-        const signurl = `https://api2.luolai.tech/vshop/api/signin/info?id=${signbody.id}&timestamp=${Date.now()}&app_key=${signbody.app_key}&u_session=${signbody.u_session}&sign=${signbody.sign}`
+        const signurl = `https://api2.luolai.tech/vshop/api/signin/info?id=${session.body.id}&timestamp=${Date.now()}&app_key=${session.body.app_key}&u_session=${session.body.u_session}&sign=${session.body.sign}`
         
-        const url = { url: signurl, headers: JSON.parse(session.headers) }
+        const url = { url: signurl, headers: session.headers }
         $.get(url,(err, resp, data)=> { 
         try {
             // $.log(data)
@@ -94,10 +93,9 @@ function signin_gift() {
     return new Promise((resolve) => {
         const session = JSON.parse($.getData($.signKey))
         const gift_id_map = {1: 136, 5: 137, 14: 138}
-        signbody = JSON.parse(session.body)
-        const signurl = `https://api2.luolai.tech/vshop/api/signin/gift/get?activity_id=${signbody.id}&gift_id=${gift_id_map[signin_info_cnt]}&timestamp=${Date.now()}&app_key=${signbody.app_key}&u_session=${signbody.u_session}&sign=${signbody.sign}`
+        const signurl = `https://api2.luolai.tech/vshop/api/signin/gift/get?activity_id=${session.body.id}&gift_id=${gift_id_map[signin_info_cnt]}&timestamp=${Date.now()}&app_key=${session.body.app_key}&u_session=${session.body.u_session}&sign=${session.body.sign}`
         
-        const url = { url: signurl, headers: JSON.parse(session.headers) }
+        const url = { url: signurl, headers: session.headers }
         $.get(url,(err, resp, data)=> { 
         try {
             // $.log(data)
