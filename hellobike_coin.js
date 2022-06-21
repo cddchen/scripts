@@ -22,27 +22,58 @@ if (isGetCookie) {
   .finally(() => $.done())
 } else {
   !(async () => {
-    await sign();
+    await signInAlipayMiniApp();
+    await signInApp();
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done()) 
 }
 
-function sign() {
+function signInAlipayMiniApp() {
   return new Promise((resolve) => {
     const signurlVal = $.getData($.signurlKey)
-    const signheaderVal = $.getData($.signheaderKey)
-    const signbodyVal = $.getData($.signbodyKey)
+    const signheaderVal = JSON.parse($.getData($.signheaderKey))
+    const signbodyVal = JSON.parse($.getData($.signbodyKey))
+    signbodyVal.platform = 9
+    signbodyVal.version = "6.16.0"
+    signbodyVal.systemCode = 65
 
-    var header = JSON.parse(signheaderVal)
-    header["x-mmtc-timestamp"] = Date.parse(new Date())
+    signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
     
-    const url = { url: signurlVal, headers: header, body: JSON.parse(signbodyVal) }
+    const url = { url: signurlVal, headers: signheaderVal, body: signbodyVal }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
         let result = JSON.parse(data)
-        $.msg($.name, `获得奖励金${result.data.bountyCountToday}`, `${result.data.title}`)
+        $.msg($.name, `获得奖励金${result.data.bountyCountToday}`, `支付宝小程序签到：${result.data.title}`)
+      } catch (e) {
+        $.logErr(e, resp)
+        $.msg($.name, `签到出错啦`)
+      } finally {
+        resolve()
+      }
+    })
+  })
+}
+
+
+function signInApp() {
+  return new Promise((resolve) => {
+    const signurlVal = $.getData($.signurlKey)
+    const signheaderVal = JSON.parse($.getData($.signheaderKey))
+    const signbodyVal = JSON.parse($.getData($.signbodyKey))
+    signbodyVal.platform = 4
+    signbodyVal.version = "6.5.0"
+    signbodyVal.systemCode = 61
+
+    signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
+    
+    const url = { url: signurlVal, headers: signheaderVal, body: signbodyVal }
+    $.post(url,(err, resp, data)=> { 
+      try {
+        // $.log(data)
+        let result = JSON.parse(data)
+        $.msg($.name, `获得奖励金${result.data.bountyCountToday}`, `哈啰单车APP签到：${result.data.title}`)
       } catch (e) {
         $.logErr(e, resp)
         $.msg($.name, `签到出错啦`)
