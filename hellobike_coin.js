@@ -63,7 +63,7 @@ function signInApp() {
     const signheaderVal = JSON.parse($.getData($.signheaderKey))
     const signbodyVal = JSON.parse($.getData($.signbodyKey))
     signbodyVal.platform = 4
-    signbodyVal.version = "6.5.0"
+    signbodyVal.version = "6.17.0"
     signbodyVal.systemCode = 61
 
     signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
