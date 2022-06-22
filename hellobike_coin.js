@@ -1,22 +1,23 @@
 // ^https:\/\/api\.hellobike\.com\/api\?common\.welfare\.signAndRecommend
 const $ = new Env('哈喽单车奖励金')
-$.signurlKey = 'signurl_hellobike_coin'
-$.signheaderKey = 'signheader_hellobike_coin'
-$.signbodyKey = 'signbody_hellobike_coin'
+$.signKey = 'hellobike_coin'
 
 let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIONS'
 
 if (isGetCookie) {
   !(async () => {
-    $.log(JSON.stringify($request))
-    const signurlVal = $request.url
-    const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = JSON.stringify($request.body);
+    const session = {}
+    session.url = $request.url;
+    session.headers = $request.headers;
+    session.body = $request.body;
 
-    if (signurlVal) $.setData(signurlVal, $.signurlKey)
-    if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
-    if (signbodyVal) $.setData(signbodyVal, $.signbodyKey)
-    $.msg($.name, `获取Cookie：成功！`)
+    if ($.setData(JSON.stringify(session), $.signKey)) {
+      $.subt = `获取会话: 成功!`
+    } else {
+      $.subt = `获取会话: 失败!`
+    }
+    $.msg($.name, $.subt, '')
+    $.log(JSON.stringify(session))
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -31,16 +32,16 @@ if (isGetCookie) {
 
 function signInAlipayMiniApp() {
   return new Promise((resolve) => {
-    const signurlVal = $.getData($.signurlKey)
-    const signheaderVal = JSON.parse($.getData($.signheaderKey))
-    const signbodyVal = JSON.parse($.getData($.signbodyKey))
-    signbodyVal["platform"] = 9
-    signbodyVal["version"] = "6.16.0"
-    signbodyVal["systemCode"] = 65
-
-    signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
+    const session = JSON.parse($.getData($.signKey))
+    signheader = session.headers
+    signheader["x-mmtc-timestamp"] = Date.parse(new Date())
     
-    const url = { url: signurlVal, headers: signheaderVal, body: signbodyVal }
+    signbody = session.body
+    signbody["platform"] = 9
+    signbody["version"] = "6.16.0"
+    signbody["systemCode"] = 65
+
+    const url = { url: signurlVal, headers: signheader, body: signbody }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
@@ -59,16 +60,16 @@ function signInAlipayMiniApp() {
 
 function signInApp() {
   return new Promise((resolve) => {
-    const signurlVal = $.getData($.signurlKey)
-    const signheaderVal = JSON.parse($.getData($.signheaderKey))
-    const signbodyVal = JSON.parse($.getData($.signbodyKey))
-    signbodyVal["platform"] = 4
-    signbodyVal["version"] = "6.17.0"
-    signbodyVal["systemCode"] = 61
-
-    signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
+    const session = JSON.parse($.getData($.signKey))
+    signheader = session.headers
+    signheader["x-mmtc-timestamp"] = Date.parse(new Date())
     
-    const url = { url: signurlVal, headers: signheaderVal, body: signbodyVal }
+    signbody = session.body
+    signbody["platform"] = 4
+    signbody["version"] = "6.17.0"
+    signbody["systemCode"] = 61
+
+    const url = { url: signurlVal, headers: signheader, body: signbody }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
