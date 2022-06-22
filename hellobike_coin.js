@@ -33,10 +33,10 @@ function signInAlipayMiniApp() {
   return new Promise((resolve) => {
     const signurlVal = $.getData($.signurlKey)
     const signheaderVal = JSON.parse($.getData($.signheaderKey))
-    var signbodyVal = JSON.parse($.getData($.signbodyKey))
-    signbodyVal.platform = 9
-    signbodyVal.version = "6.16.0"
-    signbodyVal.systemCode = 65
+    const signbodyVal = JSON.parse($.getData($.signbodyKey))
+    signbodyVal["platform"] = 9
+    signbodyVal["version"] = "6.16.0"
+    signbodyVal["systemCode"] = 65
 
     signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
     
@@ -61,10 +61,10 @@ function signInApp() {
   return new Promise((resolve) => {
     const signurlVal = $.getData($.signurlKey)
     const signheaderVal = JSON.parse($.getData($.signheaderKey))
-    var signbodyVal = JSON.parse($.getData($.signbodyKey))
-    signbodyVal.platform = 4
-    signbodyVal.version = "6.17.0"
-    signbodyVal.systemCode = 61
+    const signbodyVal = JSON.parse($.getData($.signbodyKey))
+    signbodyVal["platform"] = 4
+    signbodyVal["version"] = "6.17.0"
+    signbodyVal["systemCode"] = 61
 
     signheaderVal["x-mmtc-timestamp"] = Date.parse(new Date())
     
