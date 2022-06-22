@@ -11,7 +11,7 @@ if (isGetCookie) {
     session.headers = $request.headers;
     session.body = $request.body;
 
-    if ($.setData(JSON.stringify(session), $.signKey)) {
+    if ($.setJson(session, $.signKey)) {
       $.subt = `获取会话: 成功!`
     } else {
       $.subt = `获取会话: 失败!`
@@ -32,7 +32,7 @@ if (isGetCookie) {
 
 function signInAlipayMiniApp() {
   return new Promise((resolve) => {
-    const session = JSON.parse($.getData($.signKey))
+    const session = $.getJson($.signKey)
     signheader = session.headers
     signheader["x-mmtc-timestamp"] = Date.parse(new Date())
     
@@ -60,7 +60,7 @@ function signInAlipayMiniApp() {
 
 function signInApp() {
   return new Promise((resolve) => {
-    const session = JSON.parse($.getData($.signKey))
+    const session = $.getJson($.signKey)
     signheader = session.headers
     signheader["x-mmtc-timestamp"] = Date.parse(new Date())
     
