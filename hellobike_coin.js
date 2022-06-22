@@ -36,10 +36,7 @@ function signInAlipayMiniApp() {
     signheader = session.headers
     signheader["x-mmtc-timestamp"] = Date.parse(new Date())
     
-    signbody = session.body
-    signbody["platform"] = 9
-    signbody["version"] = "6.16.0"
-    signbody["systemCode"] = 65
+    signbody = {"from":"h5","systemCode":65,"platform":9,"version":"6.16.0","action":"common.welfare.signAndRecommend","token":session.body.token}
 
     const url = { url: session.url, headers: signheader, body: signbody }
     $.post(url,(err, resp, data)=> { 
@@ -64,10 +61,7 @@ function signInApp() {
     signheader = session.headers
     signheader["x-mmtc-timestamp"] = Date.parse(new Date())
     
-    signbody = session.body
-    signbody["platform"] = 4
-    signbody["version"] = "6.17.0"
-    signbody["systemCode"] = 61
+    signbody = {"from":"h5","systemCode":61,"platform":4,"version":"6.17.0","action":"common.welfare.signAndRecommend","token":session.body.token}
 
     const url = { url: session.url, headers: signheader, body: signbody }
     $.post(url,(err, resp, data)=> { 
