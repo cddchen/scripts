@@ -41,7 +41,7 @@ function signInAlipayMiniApp() {
     signbody["version"] = "6.16.0"
     signbody["systemCode"] = 65
 
-    const url = { url: signurlVal, headers: signheader, body: signbody }
+    const url = { url: session.url, headers: signheader, body: signbody }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
@@ -69,7 +69,7 @@ function signInApp() {
     signbody["version"] = "6.17.0"
     signbody["systemCode"] = 61
 
-    const url = { url: signurlVal, headers: signheader, body: signbody }
+    const url = { url: session.url, headers: signheader, body: signbody }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
