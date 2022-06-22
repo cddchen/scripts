@@ -26,13 +26,14 @@ if (isGetCookie) {
 } else {
   !(async () => {
     await sign();
-    // await signin_info();
-    // if (signin_info_cnt == 1 || signin_info_cnt == 5 || signin_info_cnt == 14) {
-    //     await signin_gift();
-    // }
-    // else if (signin_info_cnt == 25) {
-    //     $.msg($.name, `提醒⏰`, `已签到25天，可以抽奖啦～`)
-    // }
+    await signin_info();
+    $.log(`${signin_info_cnt}`)
+    if (signin_info_cnt == 1 || signin_info_cnt == 5 || signin_info_cnt == 14) {
+        await signin_gift();
+    }
+    else if (signin_info_cnt == 25) {
+        $.msg($.name, `提醒⏰`, `已签到25天，可以抽奖啦～`)
+    }
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done()) 
