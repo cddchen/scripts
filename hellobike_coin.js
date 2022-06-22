@@ -33,7 +33,7 @@ function signInAlipayMiniApp() {
   return new Promise((resolve) => {
     const signurlVal = $.getData($.signurlKey)
     const signheaderVal = JSON.parse($.getData($.signheaderKey))
-    const signbodyVal = JSON.parse($.getData($.signbodyKey))
+    var signbodyVal = JSON.parse($.getData($.signbodyKey))
     signbodyVal.platform = 9
     signbodyVal.version = "6.16.0"
     signbodyVal.systemCode = 65
@@ -61,7 +61,7 @@ function signInApp() {
   return new Promise((resolve) => {
     const signurlVal = $.getData($.signurlKey)
     const signheaderVal = JSON.parse($.getData($.signheaderKey))
-    const signbodyVal = JSON.parse($.getData($.signbodyKey))
+    var signbodyVal = JSON.parse($.getData($.signbodyKey))
     signbodyVal.platform = 4
     signbodyVal.version = "6.17.0"
     signbodyVal.systemCode = 61
