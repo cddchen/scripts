@@ -1,0 +1,3 @@
+^https:\/\/ysr\.yili\.com\/api\/user\/daily\/sign\?(.*) url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/yiliysr.js
+
+hostname = ysr.yili.com
