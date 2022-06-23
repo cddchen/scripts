@@ -22,6 +22,7 @@ if (isGetCookie) {
   .finally(() => $.done())
 } else {
   !(async () => {
+    await SIGN();
     await sign();
   })()
   .catch((e) => $.logErr(e))
@@ -53,7 +54,7 @@ function sign() {
         const session = $.getJson($.signKey)
 
         const url = { url:`https://coffee.yongpu.cn/sign`, headers: session.headers }
-        $.get(url,(err, resp, data)=> { 
+        $.post(url,(err, resp, data)=> { 
         try {
             // $.log(data)
             let result = JSON.parse(data)
