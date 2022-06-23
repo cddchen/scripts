@@ -33,7 +33,7 @@ function sign() {
     const session = $.getJson($.signKey)
 
     const url = { url: session.url, headers: session.headers }
-    $.post(url,(err, resp, data)=> { 
+    $.get(url,(err, resp, data)=> { 
       try {
         // $.log(data)
         let result = JSON.parse(data)
