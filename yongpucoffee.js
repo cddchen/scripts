@@ -53,7 +53,7 @@ function sign() {
     return new Promise((resolve) => {
         const session = $.getJson($.signKey)
 
-        const url = { url:`https://coffee.yongpu.cn/sign`, headers: session.headers }
+        const url = { url:`https://coffee.yongpu.cn/sign`, headers: session.headers, body:`{}` }
         $.post(url,(err, resp, data)=> { 
         try {
             // $.log(data)
