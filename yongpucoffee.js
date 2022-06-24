@@ -1,4 +1,4 @@
-// ^https:\/\/coffee\.yongpu\.cn\/getSubscribeTemplate\/SIGN$
+// ^https:\/\/coffee\.yongpu\.cn\/sign$
 const $ = new Env('永璞小岛"')
 $.signKey = 'yongpucoffee_session'
 
@@ -22,7 +22,7 @@ if (isGetCookie) {
   .finally(() => $.done())
 } else {
   !(async () => {
-    await SIGN();
+//     await SIGN();
     await sign();
   })()
   .catch((e) => $.logErr(e))
