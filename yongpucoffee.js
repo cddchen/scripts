@@ -56,7 +56,7 @@ function sign() {
         const url = { url:`https://coffee.yongpu.cn/sign`, headers: session.headers, body:`{}` }
         $.post(url,(err, resp, data)=> { 
         try {
-            // $.log(data)
+            $.log(data)
             let result = JSON.parse(data)
             $.msg($.name, `签到成功`, `${result.msg}`)
         } catch (e) {
