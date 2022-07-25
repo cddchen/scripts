@@ -1,0 +1,3 @@
+.*:\/\/.*\.csdn\.net\/.* url script-response-body https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Script/csdn.js
+
+hostname = *.csdn.net
