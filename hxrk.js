@@ -1,6 +1,6 @@
 /******************************
 [rewrite_local]
-^https:\/\/hope\.demogic\.com\/gic-wx-app\/member_sign\.json$ url script-response-body https://raw.githubusercontent.com/cddchen/scripts/main/hxrk.js
+^https:\/\/hope\.demogic\.com\/gic-wx-app\/member_sign\.json$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/hxrk.js
 
 [mitm] 
 hostname = hope.demogic.com
