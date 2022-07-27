@@ -38,13 +38,15 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
     const session = JSON.parse($.getData($.signKey))
-    const signbody = new URLSearchParams(session.body)
+    const signbody = $.formdata2object(session.body)
     const timestamp = $.time('yyyy-MM-dd HH:mm:ss')
-    signbody.set('timestamp', `${timestamp}`)
-    signbody.set('transId', `${signbody.get('appid')}${signbody.get('timestamp')}`)
-    signbody.set('sign', $.md5(`timestamp=${signbody.get('timestamp')}transId=${signbody.get('transId')}secret=damogic8888random=${signbody.get('random')}memberId=${signbody.get('memberId')}`))
+    signbody['timestamp'] = timestamp
+    signbody['transId'] = `${signbody['appid']}${signbody['timestamp']}`
+    // $.log(`timestamp=${encodeURIComponent(signbody['timestamp'])}transId=${signbody['appid']}${encodeURIComponent(signbody['timestamp'])}secret=damogic8888random=${signbody['random']}memberId=${signbody['memberId']}`)
+    signbody['sign'] = $.md5(`timestamp=${encodeURIComponent(signbody['timestamp'])}transId=${signbody['appid']}${encodeURIComponent(signbody['timestamp'])}secret=damogic8888random=${signbody['random']}memberId=${signbody['memberId']}`)
+    $.log($.object2formdata(signbody))
     
-    const url = { url: `https://hope.demogic.com/gic-wx-app/member_sign.json`, headers: session.headers, body: signbody.toString() }
+    const url = { url: `https://hope.demogic.com/gic-wx-app/member_sign.json`, headers: session.headers, body: $.object2formdata(signbody) }
     $.post(url,(err, resp, data)=> { 
       try {
         // $.log(data)
@@ -541,6 +543,19 @@ function Env(name, opts) {
           b=ii(b,c,d,a,x[i+ 9],21, -343485551);a=ad(a,olda);b=ad(b,oldb);c=ad(c,oldc);d=ad(d,oldd);
       }
       return rh(a)+rh(b)+rh(c)+rh(d);
+    }
+
+    object2formdata = function (obj) {
+      let str = [];
+      for (let p in obj)
+        if (obj.hasOwnProperty(p)) {
+          str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+      return str.join("&");
+    }
+
+    formdata2object = function (str) {
+      return JSON.parse('{"' + str.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) })
     }
     /**
      * 系统通知
