@@ -42,8 +42,7 @@ function sign() {
     const timestamp = $.time('yyyy-MM-dd HH:mm:ss')
     signbody['timestamp'] = timestamp
     signbody['transId'] = `${signbody['appid']}${signbody['timestamp']}`
-    // $.log(`timestamp=${encodeURIComponent(signbody['timestamp'])}transId=${signbody['appid']}${encodeURIComponent(signbody['timestamp'])}secret=damogic8888random=${signbody['random']}memberId=${signbody['memberId']}`)
-    signbody['sign'] = $.md5(`timestamp=${encodeURIComponent(signbody['timestamp'])}transId=${signbody['appid']}${encodeURIComponent(signbody['timestamp'])}secret=damogic8888random=${signbody['random']}memberId=${signbody['memberId']}`)
+    signbody['sign'] = $.md5(`timestamp=${signbody['timestamp']}transId=${signbody['transId']}secret=damogic8888random=${signbody['random']}memberId=${signbody['memberId']}`)
     $.log($.object2formdata(signbody))
     
     const url = { url: `https://hope.demogic.com/gic-wx-app/member_sign.json`, headers: session.headers, body: $.object2formdata(signbody) }
