@@ -23,6 +23,7 @@ if (isGetCookie) {
     session.headers = $request.headers
 
     delete session.headers['Content-Length']
+    session.headers['Content-Type'] = `multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp`
     console.log(`headers: ${session.headers}\nbody: ${session.body}`)
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
     await sign();
@@ -46,16 +47,16 @@ function sign() {
           $.log(data)
           let result = JSON.parse(data)
           if (data.PrizeID == "0") {
-            $.subt += `未抽中；`
+            $.subt += `未抽中\n`
           }
           else if(data.PrizeID == "-1") {
-            $.subt += `抽奖用尽；`
+            $.subt += `抽奖用尽\n`
           }
           else if(result.PrizeName) {
-            $.subt += `${result.PrizeName}`
+            $.subt += `${result.PrizeName}\n`
           }
           else {
-            $.subt += `${result.message}`
+            $.subt += `${result.message}\n`
           }
         } catch (e) {
           $.logErr(e, resp)
