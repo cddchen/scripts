@@ -37,10 +37,10 @@ function sign() {
   return new Promise((resolve) => {
       
       const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body }
-      $.log(httpsession)
+      $.log(JSON.stringify(httpsession))
       $.post(httpsession, (err, resp, data)=> { 
         try {
-          $.log(data)
+          $.log(JSON.stringify(data))
           let result = JSON.parse(data)
           if (data.PrizeID == "0") {
             $.subt += `未抽中\n`
