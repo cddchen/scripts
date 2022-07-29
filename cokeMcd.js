@@ -39,7 +39,7 @@ function sign() {
       //console.log(JSON.stringify(url));
       $.post(httpsession, (err, resp, data)=> { 
         try {
-          // console.log(data);
+          $.log(data)
           let result = JSON.parse(data)
           if (data.PrizeID == "0") {
             $.subt += `未抽中；`
