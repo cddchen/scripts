@@ -18,7 +18,7 @@ if (isGetCookie) {
     `------WebKitFormBoundarysNJjcmLo0zr2xcQp
     Content-Disposition: form-data; name="token"
     
-    ${$request.body.match('H5 [a-z0-9]{32}')[0]}
+    ` + $request.body.match('H5 [a-z0-9]{32}')[0] + `
     ------WebKitFormBoundarysNJjcmLo0zr2xcQp--`
     session.headers = $request.headers
 
