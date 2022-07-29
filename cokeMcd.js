@@ -15,18 +15,23 @@ $.subt = `抽奖结果：`
 if (isGetCookie) {
   !(async () => {
     $.log('body:', $request.body)
-    session.body = "------WebKitFormBoundarysNJjcmLo0zr2xcQpContent-Disposition: form-data; name=\"token\"\r\n\r\n" + $request.body.match('H5 [a-z0-9]{32}')[0] +  "\r\n------WebKitFormBoundarysNJjcmLo0zr2xcQp--\r\n"
+    session.body = []
+    session.body.push(
+      '------WebKitFormBoundarysNJjcmLo0zr2xcQp',
+      'Content-Disposition: form-data; name="token"',
+      '',
+      $request.body.match('H5 [a-z0-9]{32}')[0]);
+    session.body.push('------WebKitFormBoundarysNJjcmLo0zr2xcQp--', '');
     session.headers = $request.headers
 
     delete session.headers['Content-Length']
     session.headers['Content-Type'] = "multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp"
-    console.log(`headers: ${session.headers}\nbody: ${session.body}`)
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
     await sign();
-    await sign();
-    await sign();
-    await sign();
-    await sign();
+    // await sign();
+    // await sign();
+    // await sign();
+    // await sign();
     $.msg($.name, `抽奖完毕`, `${$.subt}`)
   })()
   .catch((e) => $.logErr(e))
@@ -37,7 +42,7 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
       
-      const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body }
+      const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body.join('\r\n') }
       $.log(JSON.stringify(httpsession))
       $.post(httpsession, (err, resp, data)=> { 
         try {
