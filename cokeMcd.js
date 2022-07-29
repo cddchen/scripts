@@ -14,12 +14,7 @@ $.subt = `抽奖结果：`
 
 if (isGetCookie) {
   !(async () => {
-    session.token = 
-    `------WebKitFormBoundarysNJjcmLo0zr2xcQp
-    Content-Disposition: form-data; name="token"
-    
-    ` + $request.body.match('H5 [a-z0-9]{32}')[0] + `
-    ------WebKitFormBoundarysNJjcmLo0zr2xcQp--`
+    session.token = `------WebKitFormBoundarysNJjcmLo0zr2xcQp\r\nContent-Disposition: form-data; name="token"\r\n\r\n` + $request.body.match('H5 [a-z0-9]{32}')[0] +  `\r\n------WebKitFormBoundarysNJjcmLo0zr2xcQp--\r\n`
     session.headers = $request.headers
 
     delete session.headers['Content-Length']
