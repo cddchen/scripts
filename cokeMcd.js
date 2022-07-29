@@ -6,7 +6,7 @@
 hostname = cokesummermcd-web01.chinacloudsites.cn
 
 *******************************/
-const $ = new Env('汉堡王任务')
+const $ = new Env('可口可乐抽奖活动')
 
 let isGetCookie = typeof $request !== 'undefined'
 const session = {}
