@@ -14,7 +14,7 @@ $.subt = `抽奖结果：`
 
 if (isGetCookie) {
   !(async () => {
-    session.body = `------WebKitFormBoundarysNJjcmLo0zr2xcQp\r\nContent-Disposition: form-data; name="token"\r\n\r\n` + $request.body.match('H5 [a-z0-9]{32}')[0] +  `\r\n------WebKitFormBoundarysNJjcmLo0zr2xcQp--\r\n`
+    session.body = `------WebKitFormBoundarysNJjcmLo0zr2xcQp\r\nContent-Disposition: form-data; name="token"\r\n\r\n` + $request.body.match('H5 [a-z0-9]{32}')[0] +  `\r\n------WebKitFormBoundarysNJjcmLo0zr2xcQp--`
     session.headers = $request.headers
 
     delete session.headers['Content-Length']
@@ -37,6 +37,7 @@ function sign() {
   return new Promise((resolve) => {
       
       const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body }
+      $.log(httpsession)
       $.post(httpsession, (err, resp, data)=> { 
         try {
           $.log(data)
