@@ -14,11 +14,11 @@ $.subt = `抽奖结果：`
 
 if (isGetCookie) {
   !(async () => {
-    session.body = `------WebKitFormBoundarysNJjcmLo0zr2xcQp\r\nContent-Disposition: form-data; name="token"\r\n\r\n` + $request.body.match('H5 [a-z0-9]{32}')[0] +  `\r\n------WebKitFormBoundarysNJjcmLo0zr2xcQp--`
+    session.body = "------WebKitFormBoundarysNJjcmLo0zr2xcQp\r\nContent-Disposition: form-data; name=\"token\"\r\n\r\n" + $request.body.match('H5 [a-z0-9]{32}')[0] +  "\r\n------WebKitFormBoundarysNJjcmLo0zr2xcQp--"
     session.headers = $request.headers
 
     delete session.headers['Content-Length']
-    session.headers['Content-Type'] = `multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp`
+    session.headers['Content-Type'] = "multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp"
     console.log(`headers: ${session.headers}\nbody: ${session.body}`)
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
     await sign();
