@@ -14,7 +14,12 @@ $.subt = `抽奖结果：`
 
 if (isGetCookie) {
   !(async () => {
-    session.body = $request.body
+    session.token = 
+    `------WebKitFormBoundarysNJjcmLo0zr2xcQp
+    Content-Disposition: form-data; name="token"
+    
+    ${$request.body.match('H5 [a-z0-9]{32}')[0]}
+    ------WebKitFormBoundarysNJjcmLo0zr2xcQp--`
     session.headers = $request.headers
 
     delete session.headers['Content-Length']
@@ -36,7 +41,6 @@ function sign() {
   return new Promise((resolve) => {
       
       const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body }
-      //console.log(JSON.stringify(url));
       $.post(httpsession, (err, resp, data)=> { 
         try {
           $.log(data)
@@ -47,8 +51,11 @@ function sign() {
           else if(data.PrizeID == "-1") {
             $.subt += `抽奖用尽；`
           }
-          else {
+          else if(result.PrizeName) {
             $.subt += `${result.PrizeName}`
+          }
+          else {
+            $.subt += `${result.message}`
           }
         } catch (e) {
           $.logErr(e, resp)
