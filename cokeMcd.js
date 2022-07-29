@@ -31,9 +31,9 @@ function sign() {
   return new Promise((resolve) => {
       
       const url = { 
-         url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky',
-         headers: session.headers,
-         body: session.body
+        url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky',
+        headers: session.headers,
+        body: session.body,
       }
       //console.log(JSON.stringify(url));
       $.post(url,(err, resp, data)=> { 
