@@ -9,24 +9,11 @@ hostname = cokesummermcd-web01.chinacloudsites.cn
 const $ = new Env('可口可乐抽奖活动')
 
 let isGetCookie = typeof $request !== 'undefined'
-const session = {}
 $.subt = `抽奖结果：`
 
 if (isGetCookie) {
   !(async () => {
-    $.log('body:', $request.body)
-    session.body = []
-    session.body.push(
-      '------WebKitFormBoundarysNJjcmLo0zr2xcQp',
-      'Content-Disposition: form-data; name="token"',
-      '',
-      $request.body.match('H5 [a-z0-9]{32}')[0]);
-    session.body.push('------WebKitFormBoundarysNJjcmLo0zr2xcQp--', '');
-    session.body = session.body.join('\r\n')
-    session.headers = $request.headers
-
-    session.headers['Content-Type'] = "multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp"
-    session.headers['Content-Length'] = session.body.length
+    $.log($request.body)
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
     await sign();
     // await sign();
@@ -42,32 +29,45 @@ if (isGetCookie) {
 
 function sign() {
   return new Promise((resolve) => {
-      
-      const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body:  }
-      $.log(JSON.stringify(httpsession))
-      $.post(httpsession, (err, resp, data)=> { 
-        try {
-          $.log(JSON.stringify(data))
-          let result = JSON.parse(data)
-          if (data.PrizeID == "0") {
-            $.subt += `未抽中\n`
-          }
-          else if(data.PrizeID == "-1") {
-            $.subt += `抽奖用尽\n`
-          }
-          else if(result.PrizeName) {
-            $.subt += `${result.PrizeName}\n`
-          }
-          else {
-            $.subt += `${result.message}\n`
-          }
-        } catch (e) {
-          $.logErr(e, resp)
-        } finally {
-          resolve()
+    const httpsession = { 
+      url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', 
+      headers: {
+        'Host': 'cokesummermcd-web01.chinacloudsites.cn',
+        'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp',
+        'Origin': 'https://i.icoke.cn',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Accept': 'application/json, text/plain, */*',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.20(0x18001442) NetType/WIFI Language/en miniProgram/wxa5811e0426a94686',
+        'Referer': 'https://i.icoke.cn/',
+        'Accept-Language': 'en-GB,en;q=0.9',
+      }, 
+      body: $request.body.replace(/WebKitFormBoundary[a-zA-Z0-9]{16}/g, 'WebKitFormBoundarysNJjcmLo0zr2xcQp')
+    }
+    $.log(JSON.stringify(httpsession))
+    $.post(httpsession, (err, resp, data)=> { 
+      try {
+        $.log(JSON.stringify(data))
+        // let result = JSON.parse(data)
+        if (data.PrizeID == "0") {
+          $.subt += `未抽中\n`
         }
-      })
+        else if(data.PrizeID == "-1") {
+          $.subt += `抽奖用尽\n`
+        }
+        else if(result.PrizeName) {
+          $.subt += `${result.PrizeName}\n`
+        }
+        else {
+          $.subt += `${result.message}\n`
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve()
+      }
     })
+  })
 }
 
 
