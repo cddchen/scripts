@@ -30,13 +30,9 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
       
-      const url = { 
-        url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky',
-        headers: session.headers,
-        body: session.body,
-      }
+      const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body }
       //console.log(JSON.stringify(url));
-      $.post(url,(err, resp, data)=> { 
+      $.post(httpsession, (err, resp, data)=> { 
         try {
           // console.log(data);
           let result = JSON.parse(data)
