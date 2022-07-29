@@ -20,7 +20,12 @@ if (isGetCookie) {
     delete session.headers['Content-Length']
     console.log(`headers: ${session.headers}\nbody: ${session.body}`)
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
-    Promise.all([sign(), sign(), sign(), sign(), sign()])
+    await sign();
+    await sign();
+    await sign();
+    await sign();
+    await sign();
+    $.msg($.name, `抽奖完毕`, `${$.subt}`)
   })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -45,7 +50,6 @@ function sign() {
           else {
             $.subt += `${result.PrizeName}`
           }
-          $.msg($.name, `抽奖结束`, `${$.subt}`)
         } catch (e) {
           $.logErr(e, resp)
         } finally {
