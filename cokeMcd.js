@@ -22,10 +22,11 @@ if (isGetCookie) {
       '',
       $request.body.match('H5 [a-z0-9]{32}')[0]);
     session.body.push('------WebKitFormBoundarysNJjcmLo0zr2xcQp--', '');
+    session.body = session.body.join('\r\n')
     session.headers = $request.headers
 
-    delete session.headers['Content-Length']
     session.headers['Content-Type'] = "multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp"
+    session.headers['Content-Length'] = session.body.length
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
     await sign();
     // await sign();
@@ -42,7 +43,7 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
       
-      const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body: session.body.join('\r\n') }
+      const httpsession = { url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', headers: session.headers, body:  }
       $.log(JSON.stringify(httpsession))
       $.post(httpsession, (err, resp, data)=> { 
         try {
