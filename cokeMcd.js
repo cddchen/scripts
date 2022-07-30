@@ -1,6 +1,6 @@
 /******************************
 [rewrite_local]
-^https:\/\/cokesummermcd-web01\.chinacloudsites\.cn\/Api\/User\/Login$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/cokeMcd.js
+^https:\/\/cokesummermcd-web01\.chinacloudsites\.cn\/Api\/User\/AddShareLucky$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/cokeMcd.js
 
 [mitm] 
 hostname = cokesummermcd-web01.chinacloudsites.cn
@@ -13,12 +13,12 @@ $.subt = `抽奖结果：`
 
 if (isGetCookie) {
   !(async () => {
-    $.log($request.body)
+    $.log(JSON.stringify($request))
     $.msg($.name, `获取session成功`, `开始运行抽奖。。。`)
     await sign();
-    // await sign();
-    // await sign();
-    // await sign();
+    await sign();
+    await sign();
+    await sign();
     // await sign();
     $.msg($.name, `抽奖完毕`, `${$.subt}`)
   })()
@@ -30,24 +30,12 @@ if (isGetCookie) {
 function sign() {
   return new Promise((resolve) => {
     const httpsession = { 
-      url: 'https://cokesummermcd-web01.chinacloudsites.cn/Api/User/AddShareLucky', 
-      headers: {
-        'Host': 'cokesummermcd-web01.chinacloudsites.cn',
-        'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarysNJjcmLo0zr2xcQp',
-        'Origin': 'https://i.icoke.cn',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Accept': 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.20(0x18001442) NetType/WIFI Language/en miniProgram/wxa5811e0426a94686',
-        'Referer': 'https://i.icoke.cn/',
-        'Accept-Language': 'en-GB,en;q=0.9',
-      }, 
-      body: $request.body.replace(/WebKitFormBoundary[a-zA-Z0-9]{16}/g, 'WebKitFormBoundarysNJjcmLo0zr2xcQp')
+      url: $request.url, 
+      headers: $request.headers, 
+      body: $request.body,
     }
-    $.log(JSON.stringify(httpsession))
     $.post(httpsession, (err, resp, data)=> { 
       try {
-        $.log(JSON.stringify(data))
         // let result = JSON.parse(data)
         if (data.PrizeID == "0") {
           $.subt += `未抽中\n`
