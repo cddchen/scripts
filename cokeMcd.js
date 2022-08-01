@@ -37,14 +37,14 @@ function sign() {
     $.post(httpsession, (err, resp, data)=> { 
       try {
         let result = JSON.parse(data)
-        if (data.PrizeID == "0") {
+        if (result.data.PrizeID == "0") {
           $.subt += `未抽中\n`
         }
-        else if(data.PrizeID == "-1") {
+        else if(result.data.PrizeID == "-1") {
           $.subt += `抽奖用尽\n`
         }
-        else if(result.PrizeName) {
-          $.subt += `${result.PrizeName}\n`
+        else if(result.data.PrizeName) {
+          $.subt += `${result.data.PrizeName}\n`
         }
         else {
           $.subt += `${result.message}\n`
