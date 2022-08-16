@@ -99,7 +99,7 @@ function signin_info() {
 function signin_gift() {
     return new Promise((resolve) => {
         const session = JSON.parse($.getData($.signKey))
-        const gift_id_map = {1: 140, 5: 141, 14: 142, 25: 143}
+        const gift_id_map = {1: 144, 5: 145, 14: 146, 25: 147}
         timestamp = Date.now()
         encrpy = `${appPwd}u_session${session.body.u_session}timestamp${timestamp}gift_id${gift_id_map[signin_info_cnt]}app_key${session.body.app_key}activity_id${session.body.id}${appPwd}`
         const signurl = `https://api2.luolai.tech/vshop/api/signin/gift/get?activity_id=${session.body.id}&gift_id=${gift_id_map[signin_info_cnt]}&timestamp=${timestamp}&app_key=${session.body.app_key}&u_session=${session.body.u_session}&sign=${$.md5(encrpy)}`
