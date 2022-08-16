@@ -1,47 +1,59 @@
-// ^https://h5.youzan.com/wscump/checkin/checkinV2.json?
+/******************************
+[rewrite_local]
+^https?:\/\/h5\.youzan\.com\/wscump\/checkin\/checkinV2\.json\? url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/XBOXCLUB.js
+
+[mitm] 
+hostname = h5.youzan.com
+
+*******************************/
 const $ = new Env('XBOX俱乐部')
-$.signurlKey = 'signurl_xbox'
-$.signheaderKey = 'signheader_xbox'
+$.signKey = 'xbox_session'
 
 let isGetCookie = typeof $request !== 'undefined'
 
 if (isGetCookie) {
-  getHeaders()
+  !(async () => {
+    const session = {}
+    session.url = $request.url;
+    session.headers = $request.headers;
+    // session.body = $request.body;
+
+    if ($.setJson(session, $.signKey)) {
+        $.subt = `获取会话: 成功!`
+      } else {
+        $.subt = `获取会话: 失败!`
+      }
+      $.msg($.name, $.subt, '')
+  })()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done())
 } else {
-  sign()
-}
-
-function getHeaders() {
-  if ($request) {
-    const signurlVal = $request.url
-    const signheaderVal = JSON.stringify($request.headers)
-    const signbodyVal = JSON.stringify($request.body)
-
-    if (signurlVal) $.setData(signurlVal, $.signurlKey)
-    if (signheaderVal) $.setData(signheaderVal, $.signheaderKey)
-    $.msg($.name, `获取Cookie：成功！`)
-  }
-  $.done()
+  !(async () => {
+    await sign();
+  })()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done()) 
 }
 
 function sign() {
-  const signurlVal = $.getData($.signurlKey)
-  const signheaderVal = $.getData($.signheaderKey)
-  $.log(`${$.name}, data: ${signurlVal}, ${signheaderVal}`)
-  if (!signurlVal || !signheaderVal) {
-    $.msg($.name, `请先获取Cookie!`)
-    $.done()
-    return
-  }
-  const url = { url: signurlVal, headers: JSON.parse(signheaderVal) }
-  $.get(url, (error, response, data) => {
-    $.log(`${$.name}, data: ${data}`)
-    let result = JSON.parse(data)
-    let subTitle = `结果：${result.msg}，${result.data.desc}`
-    $.msg($.name, subTitle)
-    $.done()
+  return new Promise((resolve) => {
+    const session = $.getJson($.signKey)
+    const url = { url: session.url, headers: session.headers }
+    $.post(url, (err, resp, data)=> { 
+      try {
+        $.log(`${$.name}, data: ${data}`)
+        let result = JSON.parse(data)
+        let subTitle = `结果：${result.msg}，${result.data.desc}`
+        $.msg($.name, subTitle)
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve()
+      }
+    })
   })
 }
+
 
 
 function Env(name, opts) {
