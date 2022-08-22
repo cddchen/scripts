@@ -1,8 +1,8 @@
 /******************************
 [rewrite_local]
-^https:\/\/bike\.hellobike\.com\/api\?student\.center\.registrate url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/XBOXCLUB.js
+^https:\/\/bike\.hellobike\.com\/api\?student\.center\.registrate url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/hellobike_stu_coin.js
 [mitm] 
-hostname = bike.hellobike.com
+hostname = h5.youzan.com
 *******************************/
 
 const $ = new Env('哈喽单车学生中心奖励金')
