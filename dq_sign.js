@@ -24,7 +24,7 @@ if (isRequest) {
     session.url = $request.url;
     session.headers = $request.headers;
     session.body = $request.body;
-    if ($.setJson(session), $.signKey) {
+    if ($.setJson(session, $.signKey)) {
       $.subt = `获取会话: 成功!`
     } else {
       $.subt = `获取会话: 失败!`
