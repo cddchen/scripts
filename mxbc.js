@@ -6,9 +6,10 @@ let isGetCookie = (typeof $request !== 'undefined') && $request.method != 'OPTIO
 
 if (isGetCookie) {
   !(async () => {
-    $.log(JSON.stringify($request))
+//     $.log(JSON.stringify($request))
     if ($.setData(JSON.stringify($request.headers), $.signKey)) {
       $.subt = `获取会话: 成功!`
+      $.log(JSON.stringify($request.headers))
     } else {
       $.subt = `获取会话: 失败!`
     }
