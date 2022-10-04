@@ -9,7 +9,7 @@ hostname = h5.ele.me
 
 const $ = new Env('饿了么Cookie')
 !(async () => {
-  if ($.setData(JSON.stringify($request.headers;), 'elmCookie')) {
+  if ($.setData(JSON.stringify($request.headers), 'elmCookie')) {
     $.subt = `获取会话: 成功!`
   } else {
     $.subt = `获取会话: 失败!`
