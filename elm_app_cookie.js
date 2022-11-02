@@ -1,9 +1,9 @@
 /******************************
 [rewrite_local]
-^https:\/\/waimai\-guide\.ele\.me\/gw\/mtop\.alsc\.svip\.usergrowth\.getrankdetails.* url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/elm_app_cookie.js
+^https:\/\/nt2\.ele\.me\/c\/s url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/elm_app_cookie.js
 
 [mitm] 
-hostname = waimai-guide.ele.me
+hostname = nt2.ele.me
 
 *******************************/
 
