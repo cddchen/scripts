@@ -1,4 +1,11 @@
-// ^https:\/\/webapi.qmai.cn\/web\/catering\/integral\/sign\/signIn$
+/******************************
+[rewrite_local]
+^https:\/\/webapi.qmai.cn\/web\/catering\/integral\/sign\/signIn$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/ZYBWJ.js
+
+[mitm] 
+hostname = webapi.qmai.cn
+
+*******************************/
 const $ = new Env('紫燕百味鸡')
 $.signKey = 'session_zybwj'
 
