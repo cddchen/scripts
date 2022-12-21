@@ -21,7 +21,7 @@ if (isGetCookie) {
 		session.url = $request.url;
 		session.headers = $request.headers;
 		session.body = $request.body;
-		if ($.setData(JSON.stringify(session), $.signKey)) {
+		if ($.setJson(session), $.signKey) {
 			$.subt = `获取会话: 成功!`
 			$.log(JSON.stringify(session))
 		} else {
@@ -61,12 +61,7 @@ function sign(session) {
 	return new Promise((resolve) => {
 		session = JSON.parse(session)
 
-		const url = {
-			url: session.url,
-			headers: session.headers,
-			body: session.body
-		}
-		//console.log(JSON.stringify(url));
+		const url = { url: session.url, headers: session.headers, body: session.body }
 		$.post(url, (err, resp, data) => {
 			try {
 				// console.log(data);
