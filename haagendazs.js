@@ -11,17 +11,19 @@ const $ = new Env('哈根达斯')
 const envSplitor = ['`']
 const ckNames = ['HaagenDazs']
 const MAX_THREAD = 5
-$.signKey = 'HaagenDazs'
 
 if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
   !(async () => {
     const session = {}
-    session.Authorization = JSON.parse($request.headers).Authorization;
+    session.Authorization = $request.headers.Authorization;
     session.body = $request.body;
 
-    if ($.setJson(session, $.signKey)) {
+    let pre_session = $.getData(ckNames[0])
+    let log = pre_session.length == 0 ? JSON.stringify(session) : pre_session + envSplitor[0] + JSON.stringify(session)
+    if ($.setData(log, ckNames[0])) {
         $.subt = `获取会话: 成功!`
-        $.log(JSON.stringify(session))
+        $.log('headers:', $request.headers)
+        $.log('body:', $request.body)
       } else {
         $.subt = `获取会话: 失败!`
       }
@@ -51,37 +53,30 @@ class UserClass {
       var body = JSON.parse(session.body)
       var e = 1673250422603;
       var i = "openId=" + body["openId"] + "&unionId=" + body["unionId"] + "&timestamp=".concat(e)
-      this.log(i)
       var h = Array.from(i).sort().join("")
       var g = $.md5("key=!TDD7@DDZ6AGN3")
       var r = $.md5($.md5(h) + "," + g)
       body.sign = r
       body.timestamp = e
 
-      headers = {
-        "Accept": "*/*",
-        "Accept-Encoding":"gzip,compress,br,deflate",
-        "Connection":"keep-alive",
-        "Content-Type":"application/json",
-        "Referer":"https://servicewechat.com/wx3656c2a2353eb377/258/page-frame.html","Host":"haagendazs.smarket.com.cn",
-        "User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f34) NetType/WIFI Language/en",
-        "Authorization":session.Authorization,
-        "Accept-Language":"en-us"
+      let headers = session.headers
+      headers["User-Agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f34) NetType/WIFI Language/en"
+      headers["Authorization"] =  headers["Authorization"].substr(0, 6) + ' ' + headers["Authorization"].substr(6)
+
+      const url = { 
+        url: `https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn`, 
+        headers: headers, 
+        body: JSON.stringify(body) 
       }
-      const url = { url: `https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn`, headers: JSON.stringify(headers), body: JSON.stringify(body) }
+      
       $.post(url,(err, resp, data)=> { 
         this.log(data)
-        let result = JSON.parse(data)
-        if (result.code == 0) {
-          this.subt += `success: ${result.msg}`
-        }
-        else {
-          this.subt += `failure: ${result.msg}`
-        }
+        let ret = JSON.parse(data)
+        this.subt += `签到成功`
       })
     } catch(e) {
       this.log(e)
-      this.subt += `error: ${e}`
+      this.subt += `出错了`
     } finally {
       $.notifyStr.push(`【${this.name}】: ${this.subt}`)
       return Promise.resolve()
@@ -154,7 +149,7 @@ function Env(name, opts) {
 
     #Task
     read_env(Class) {
-      let envStrList = ckNames.map(x => process.env[x]);
+      let envStrList = ckNames.map(x => { $.isNode() ? process.env[x] : $.getData(x) });
       for (let env_str of envStrList.filter(x => !!x)) {
         let sp = envSplitor.filter(x => env_str.includes(x));
         let splitor = sp.length > 0 ? sp[0] : envSplitor[0];
