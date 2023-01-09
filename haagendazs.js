@@ -8,7 +8,7 @@ hostname = haagendazs.smarket.com.cn
 *******************************/
 const $ = new Env('哈根达斯')
 
-const envSplitor = ['\n', '@']
+const envSplitor = ['`']
 const ckNames = ['HaagenDazs']
 const MAX_THREAD = 5
 $.signKey = 'HaagenDazs'
@@ -16,7 +16,7 @@ $.signKey = 'HaagenDazs'
 if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
   !(async () => {
     const session = {}
-    session.headers = $request.headers;
+    session.Authorization = JSON.parse($request.headers).Authorization;
     session.body = $request.body;
 
     if ($.setJson(session, $.signKey)) {
@@ -47,30 +47,43 @@ class UserClass {
   } 
   async sign() {
     try {
-      session = JSON.parse(this.ck)
-      var body = session.body
-      var e = (new Date).getTime();
+      var session = JSON.parse(this.cookie)
+      var body = JSON.parse(session.body)
+      var e = 1673250422603;
       var i = "openId=" + body["openId"] + "&unionId=" + body["unionId"] + "&timestamp=".concat(e)
+      this.log(i)
       var h = Array.from(i).sort().join("")
       var g = $.md5("key=!TDD7@DDZ6AGN3")
       var r = $.md5($.md5(h) + "," + g)
       body.sign = r
-      const url = { url: `https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn`, headers: session.headers, body: body }
+      body.timestamp = e
+
+      headers = {
+        "Accept": "*/*",
+        "Accept-Encoding":"gzip,compress,br,deflate",
+        "Connection":"keep-alive",
+        "Content-Type":"application/json",
+        "Referer":"https://servicewechat.com/wx3656c2a2353eb377/258/page-frame.html","Host":"haagendazs.smarket.com.cn",
+        "User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f34) NetType/WIFI Language/en",
+        "Authorization":session.Authorization,
+        "Accept-Language":"en-us"
+      }
+      const url = { url: `https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn`, headers: JSON.stringify(headers), body: JSON.stringify(body) }
       $.post(url,(err, resp, data)=> { 
         this.log(data)
         let result = JSON.parse(data)
         if (result.code == 0) {
-          this.subt = `success: ${result.msg}`
+          this.subt += `success: ${result.msg}`
         }
         else {
-          this.subt = `failure: ${result.msg}`
+          this.subt += `failure: ${result.msg}`
         }
       })
     } catch(e) {
-      $.log(e)
-      this.subt = `error: ${e}`
+      this.log(e)
+      this.subt += `error: ${e}`
     } finally {
-      $.notifyStr.push(`【${this.name}】:${this.subt}`)
+      $.notifyStr.push(`【${this.name}】: ${this.subt}`)
       return Promise.resolve()
     }
   }
