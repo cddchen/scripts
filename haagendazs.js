@@ -15,7 +15,7 @@ const MAX_THREAD = 5
 if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
   !(async () => {
     const session = {}
-    session.Authorization = $request.headers.Authorization;
+    session.headers = $request.headers;
     session.body = $request.body;
 
     let pre_session = $.getData(ckNames[0])
