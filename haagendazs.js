@@ -10,7 +10,9 @@ const $ = new Env('哈根达斯')
 
 const envSplitor = ['`']
 const ckNames = ['HaagenDazs']
-const MAX_THREAD = 5
+const MAX_THREAD = 1
+const DEFAULT_TIMEOUT = 8000, DEFAULT_RETRY = 3;
+
 
 if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
   !(async () => {
@@ -38,8 +40,7 @@ class UserClass {
   constructor(ck) {
     this.index = $.userIdx++; 
     this.name = `账号${this.index}`
-    this.cookie = ck;
-    this.subt = ''
+    this.cookie = JSON.parse(ck);
   }
   log(msg, opt = {}) { 
     var m = '', n = $.userCount.toString().length;; 
@@ -49,36 +50,45 @@ class UserClass {
   } 
   async sign() {
     try {
-      var session = JSON.parse(this.cookie)
-      var body = JSON.parse(session.body)
-      var e = 1673250422603;
-      var i = "openId=" + body["openId"] + "&unionId=" + body["unionId"] + "&timestamp=".concat(e)
-      var h = Array.from(i).sort().join("")
-      var g = $.md5("key=!TDD7@DDZ6AGN3")
-      var r = $.md5($.md5(h) + "," + g)
-      body.sign = r
-      body.timestamp = e
+      let sign_body = JSON.parse(this.cookie.body)
+      const e = (new Date).getTime();
+      // const e = 1673336746360;
+      const i = "openId=" + sign_body["openId"] + "&unionId=" + sign_body["unionId"] + "&timestamp=".concat(e)
+      const h = Array.from(i).sort().join("")
+      const g = $.md5("key=!TDD7@DDZ6AGN3")
+      const r = $.md5($.md5(h) + "," + g)
+      // this.log(r)
+      sign_body.timestamp = e
+      sign_body.sign = r
 
-      let headers = session.headers
-      headers["User-Agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f34) NetType/WIFI Language/en"
-      headers["Authorization"] =  headers["Authorization"].substr(0, 6) + ' ' + headers["Authorization"].substr(6)
-
-      const url = { 
-        url: `https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn`, 
-        headers: headers, 
-        body: JSON.stringify(body) 
+      const headers = {
+        Host: 'haagendazs.smarket.com.cn',
+        Connection: 'keep-alive',
+        'Content-Type': 'application/json',
+        "Accept-Encoding": "gzip,compress,br,deflate",
+        "User-Agent": 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f2f) NetType/WIFI Language/zh_CN miniProgram/wx73247c7819d61796',
+        Referer: 'https://servicewechat.com/wx3656c2a2353eb377/259/page-frame.html',
+        Authorization: "Bearer " + this.cookie.token
       }
       
-      $.post(url,(err, resp, data)=> { 
-        this.log(data)
-        let ret = JSON.parse(data)
-        this.subt += `签到成功`
-      })
+      const url = {
+        url: 'https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn',
+        headers: headers,
+        body: JSON.stringify(sign_body)
+      }
+      this.log(JSON.stringify(url))
+      let {result} = await $.post(url)
+      this.log(JSON.stringify(result))
+      let code = result?.code
+      if (code == 0) {
+        $.notifyStr.push('签到成功，' + result?.msg)
+      } else {
+        $.notifyStr.push('签到失败，' + result?.msg)
+      }
     } catch(e) {
       this.log(e)
-      this.subt += `出错了`
+      $.notifyStr.push(`签到失败，${e}`)
     } finally {
-      $.notifyStr.push(`【${this.name}】: ${this.subt}`)
       return Promise.resolve()
     }
   }
@@ -149,7 +159,7 @@ function Env(name, opts) {
 
     #Task
     read_env(Class) {
-      let envStrList = ckNames.map(x => { $.isNode() ? process.env[x] : $.getData(x) });
+      let envStrList = ckNames.map(x => { return $.isNode() ? process.env[x] : $.getData(x) });
       for (let env_str of envStrList.filter(x => !!x)) {
         let sp = envSplitor.filter(x => env_str.includes(x));
         let splitor = sp.length > 0 ? sp[0] : envSplitor[0];
@@ -175,7 +185,7 @@ function Env(name, opts) {
       let taskAll = [];
       let taskConf = { idx: 0 };
       while (thread--) taskAll.push(this.threads(taskName, taskConf));
-      await Promise.all(taskAll);
+      await Promise.all(taskAll)
     }
     async showmsg() {
       if (!this.notifyStr.length) return;
@@ -428,113 +438,87 @@ function Env(name, opts) {
       }
     }
 
-    get(opts, callback = () => {}) {
+    async get(opts) {
+      let Resp = null;
       if (opts.headers) {
         delete opts.headers['Content-Type'];
         delete opts.headers['Content-Length'];
       }
-      if (this.isSurge() || this.isLoon()) {
-        if (this.isSurge() && this.isNeedRewrite) {
-          opts.headers = opts.headers || {};
-          Object.assign(opts.headers, { 'X-Surge-Skip-Scripting': false });
-        }
-        $httpClient.get(opts, (err, resp, body) => {
-          if (!err && resp) {
-            resp.body = body;
-            resp.statusCode = resp.status;
+      try {
+        if (this.isQuanX()) {
+          if (this.isNeedRewrite) {
+            opts.opts = opts.opts || {};
+            Object.assign(opts.opts, { hints: false });
           }
-          callback(err, resp, body);
-        });
-      } else if (this.isQuanX()) {
-        if (this.isNeedRewrite) {
-          opts.opts = opts.opts || {};
-          Object.assign(opts.opts, { hints: false });
-        }
-        $task.fetch(opts).then(
-          (resp) => {
-            const { statusCode: status, statusCode, headers, body } = resp;
-            callback(null, { status, statusCode, headers, body }, body);
-          },
-          (err) => callback(err)
-        );
-      } else if (this.isNode()) {
-        this.initGotEnv(opts);
-        this.got(opts)
-          .on('redirect', (resp, nextOpts) => {
-            try {
-              if (resp.headers['set-cookie']) {
-                const ck = resp.headers['set-cookie']
-                  .map(this.ckTough.Cookie.parse)
-                  .toString();
-                if (ck) {
-                  this.ckJar.setCookieSync(ck, null);
+          await $task.fetch(opts).then(t => {Resp = t }, e => { Resp = e.response });
+        } else if (this.isNode()) {
+          this.initGotEnv(opts);
+          this.got(opts)
+            .on('redirect', (resp, nextOpts) => {
+              try {
+                if (resp.headers['set-cookie']) {
+                  const ck = resp.headers['set-cookie']
+                    .map(this.ckTough.Cookie.parse)
+                    .toString();
+                  if (ck) {
+                    this.ckJar.setCookieSync(ck, null);
+                  }
+                  nextOpts.cookieJar = this.ckJar;
                 }
-                nextOpts.cookieJar = this.ckJar;
+              } catch (e) {
+                this.logErr(e);
               }
-            } catch (e) {
-              this.logErr(e);
-            }
-            // this.ckJar.setCookieSync(resp.headers['set-cookie'].map(Cookie.parse).toString())
-          })
-          .then(
-            (resp) => {
-              const { statusCode: status, statusCode, headers, body } = resp;
-              callback(null, { status, statusCode, headers, body }, body);
-            },
-            (err) => {
-              const { message: error, response: resp } = err;
-              callback(error, resp, resp && resp.body);
-            }
-          );
-      }
+              // this.ckJar.setCookieSync(resp.headers['set-cookie'].map(Cookie.parse).toString())
+            })
+            .then(t => { Resp = t }, e => { Resp = e.response });
+        }
+      } catch (e) {
+        if (e.name == 'TimeoutError') { 
+          this.log(`请求超时，重试第${count}次`); 
+        } else { 
+          this.log(`请求错误(${e.message})，重试第${count}次`); 
+        } 
+      };
+      if (Resp == null) return Promise.resolve({ statusCode: -1, headers: null, result: null });
+      let { statusCode, headers, body } = Resp; 
+      if (body) try { body = JSON.parse(body); } catch { }; 
+      return Promise.resolve({ statusCode, headers, result: body }) 
     }
 
-    post(opts, callback = () => {}) {
+    async post(opts) {
+      var Resp = null;
       const method = opts.method ? opts.method.toLocaleLowerCase() : 'post';
       // 如果指定了请求体, 但没指定`Content-Type`, 则自动生成
       if (opts.body && opts.headers && !opts.headers['Content-Type']) {
-        opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        opts.headers['Content-Type'] = 'application/json';
       }
       if (opts.headers) delete opts.headers['Content-Length'];
-      if (this.isSurge() || this.isLoon()) {
-        if (this.isSurge() && this.isNeedRewrite) {
-          opts.headers = opts.headers || {};
-          Object.assign(opts.headers, { 'X-Surge-Skip-Scripting': false });
-        }
-        $httpClient[method](opts, (err, resp, body) => {
-          if (!err && resp) {
-            resp.body = body;
-            resp.statusCode = resp.status;
+      try {
+        if (this.isQuanX()) {
+          this.log('in QuanX env')
+          opts.method = method;
+          if (this.isNeedRewrite) {
+            opts.opts = opts.opts || {};
+            Object.assign(opts.opts, { hints: false });
           }
-          callback(err, resp, body);
-        });
-      } else if (this.isQuanX()) {
-        opts.method = method;
-        if (this.isNeedRewrite) {
-          opts.opts = opts.opts || {};
-          Object.assign(opts.opts, { hints: false });
+          await $task.fetch(opts).then(t => {Resp = t }, e => { Resp = e.response });
+        } else if (this.isNode()) {
+          this.initGotEnv(opts);
+          const { url, ..._opts } = opts;
+          await this.got[method](url, _opts).then(t => { Resp = t }, e => { Resp = e.response })
         }
-        $task.fetch(opts).then(
-          (resp) => {
-            const { statusCode: status, statusCode, headers, body } = resp;
-            callback(null, { status, statusCode, headers, body }, body);
-          },
-          (err) => callback(err)
-        );
-      } else if (this.isNode()) {
-        this.initGotEnv(opts);
-        const { url, ..._opts } = opts;
-        this.got[method](url, _opts).then(
-          (resp) => {
-            const { statusCode: status, statusCode, headers, body } = resp;
-            callback(null, { status, statusCode, headers, body }, body);
-          },
-          (err) => {
-            const { message: error, response: resp } = err;
-            callback(error, resp, resp && resp.body);
-          }
-        );
-      }
+      } catch (e) {
+        if (e.name == 'TimeoutError') { 
+          this.log(`请求超时，重试第${count}次`); 
+        } else { 
+          this.log(`请求错误(${e.message})，重试第${count}次`); 
+        } 
+      };
+      
+      if (Resp == null) return Promise.resolve({ statusCode: -1, headers: null, result: null });
+      let { statusCode, headers, body } = Resp; 
+      if (body) try { body = JSON.parse(body); } catch { }; 
+      return Promise.resolve({ statusCode, headers, result: body }) 
     }
     /**
      *
