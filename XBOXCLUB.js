@@ -1,10 +1,8 @@
 /******************************
 [rewrite_local]
 ^https?:\/\/h5\.youzan\.com\/wscump\/checkin\/checkinV2\.json\? url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/XBOXCLUB.js
-
 [mitm] 
 hostname = h5.youzan.com
-
 *******************************/
 const $ = new Env('XBOX俱乐部')
 $.signKey = 'xbox_session'
@@ -39,18 +37,19 @@ function sign() {
   return new Promise((resolve) => {
     const session = $.getJson($.signKey)
     const url = { url: session.url, headers: session.headers }
-    $.get(url, (err, resp, data)=> { 
-      try {
-        $.log(`${$.name}, data: ${data}`)
+    try {
+      $.get(url, (err, resp, data)=> { 
+        $.log(`data: ${data}`)
         let result = JSON.parse(data)
-        let subTitle = `结果：${result.msg}，${result.data.desc}`
+        let subTitle = `结果：${result.msg}，${result.data.desc}: ${result.data.list[0].infos.title}`
         $.msg($.name, subTitle)
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve()
-      }
-    })
+      })
+    } catch(e) {
+      $.log(e.message)
+      $.msg($.name, `需要重新登录！${e.message}`)
+    } finally {
+      resolve()
+    }
   })
 }
 
