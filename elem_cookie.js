@@ -1,21 +1,22 @@
 /******************************
 [rewrite_local]
 ^https:\/\/h5\.ele\.me url script-request-header https://raw.githubusercontent.com/cddchen/scripts/main/elem_cookie.js
-
 [mitm] 
 hostname = h5.ele.me
-
 *******************************/
 
 const $ = new Env('饿了么Cookie')
 !(async () => {
-  if ($.setData(JSON.stringify($request.headers.Cookie), 'elmck')) {
+  const cookie = $.str2json($request.headers.Cookie);
+  if (!cookie.SID || !cookie.cookie2) return;
+  const saved = `SID=${cookie.SID};cookie2=${cookie.cookie2}`
+  if ($.setData(saved,'elmck')) {
     $.subt = `获取会话: 成功!`
+    $.log(saved)
   } else {
     $.subt = `获取会话: 失败!`
   }
   $.msg($.name, $.subt, '')
-  $.log(JSON.stringify($request.headers.Cookie))
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -416,6 +417,19 @@ function Env(name, opts) {
           }
         );
       }
+    }
+    str2json(str, decode = false) {
+      let ret = {};
+      for (let item of str.split(';')) {
+        if (!item) continue;
+        let idx = item.indexOf('=');
+        if (idx == -1) continue;
+        let k = item.substr(0, idx);
+        if (k.substr(0, 1) == ' ') k = k.substr(1)
+        let v = item.substr(idx + 1);
+        if (decode) v = decodeURIComponent(v); ret[k] = v;
+      }
+      return ret;
     }
     /**
      *
