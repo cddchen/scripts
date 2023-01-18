@@ -33,24 +33,19 @@ if (isGetCookie) {
   .finally(() => $.done()) 
 }
 
-function sign() {
-  return new Promise((resolve) => {
+async function sign() {
+  try {
     const session = $.getJson($.signKey)
     const url = { url: session.url, headers: session.headers }
-    try {
-      $.get(url, (err, resp, data)=> { 
-        $.log(`data: ${data}`)
-        let result = JSON.parse(data)
-        let subTitle = `结果：${result.msg}，${result.data.desc}: ${result.data.list[0].infos.title}`
-        $.msg($.name, subTitle)
-      })
-    } catch(e) {
-      $.log(e.message)
-      $.msg($.name, `需要重新登录！${e.message}`)
-    } finally {
-      resolve()
-    }
-  })
+    let {result} = await $.get(url)
+    let subTitle = `结果：${result.msg}，${result.data.desc}: ${result.data.list[0].infos.title}`
+    $.msg($.name, subTitle)
+  } catch(e) {
+    $.log(e.message)
+    $.msg($.name, `需要重新登录！${e.message}`)
+  } finally {
+    return Promise.resolve()
+  }
 }
 
 
@@ -344,113 +339,87 @@ function Env(name, opts) {
       }
     }
 
-    get(opts, callback = () => {}) {
+    async get(opts) {
+      let Resp = null;
       if (opts.headers) {
         delete opts.headers['Content-Type'];
         delete opts.headers['Content-Length'];
       }
-      if (this.isSurge() || this.isLoon()) {
-        if (this.isSurge() && this.isNeedRewrite) {
-          opts.headers = opts.headers || {};
-          Object.assign(opts.headers, { 'X-Surge-Skip-Scripting': false });
-        }
-        $httpClient.get(opts, (err, resp, body) => {
-          if (!err && resp) {
-            resp.body = body;
-            resp.statusCode = resp.status;
+      try {
+        if (this.isQuanX()) {
+          if (this.isNeedRewrite) {
+            opts.opts = opts.opts || {};
+            Object.assign(opts.opts, { hints: false });
           }
-          callback(err, resp, body);
-        });
-      } else if (this.isQuanX()) {
-        if (this.isNeedRewrite) {
-          opts.opts = opts.opts || {};
-          Object.assign(opts.opts, { hints: false });
-        }
-        $task.fetch(opts).then(
-          (resp) => {
-            const { statusCode: status, statusCode, headers, body } = resp;
-            callback(null, { status, statusCode, headers, body }, body);
-          },
-          (err) => callback(err)
-        );
-      } else if (this.isNode()) {
-        this.initGotEnv(opts);
-        this.got(opts)
-          .on('redirect', (resp, nextOpts) => {
-            try {
-              if (resp.headers['set-cookie']) {
-                const ck = resp.headers['set-cookie']
-                  .map(this.ckTough.Cookie.parse)
-                  .toString();
-                if (ck) {
-                  this.ckJar.setCookieSync(ck, null);
+          await $task.fetch(opts).then(t => {Resp = t }, e => { Resp = e.response });
+        } else if (this.isNode()) {
+          this.initGotEnv(opts);
+          await this.got(opts)
+            .on('redirect', (resp, nextOpts) => {
+              try {
+                if (resp.headers['set-cookie']) {
+                  const ck = resp.headers['set-cookie']
+                    .map(this.ckTough.Cookie.parse)
+                    .toString();
+                  if (ck) {
+                    this.ckJar.setCookieSync(ck, null);
+                  }
+                  nextOpts.cookieJar = this.ckJar;
                 }
-                nextOpts.cookieJar = this.ckJar;
+              } catch (e) {
+                this.logErr(e);
               }
-            } catch (e) {
-              this.logErr(e);
-            }
-            // this.ckJar.setCookieSync(resp.headers['set-cookie'].map(Cookie.parse).toString())
-          })
-          .then(
-            (resp) => {
-              const { statusCode: status, statusCode, headers, body } = resp;
-              callback(null, { status, statusCode, headers, body }, body);
-            },
-            (err) => {
-              const { message: error, response: resp } = err;
-              callback(error, resp, resp && resp.body);
-            }
-          );
-      }
+              // this.ckJar.setCookieSync(resp.headers['set-cookie'].map(Cookie.parse).toString())
+            })
+            .then(t => { Resp = t }, e => { Resp = e.response });
+        }
+      } catch (e) {
+        if (e.name == 'TimeoutError') { 
+          this.log(`请求超时，重试第${count}次`); 
+        } else { 
+          this.log(`请求错误(${e.message})，重试第${count}次`); 
+        } 
+      };
+      if (Resp == null) return Promise.resolve({ statusCode: -1, headers: null, result: null });
+      let { statusCode, headers, body } = Resp; 
+      if (body) try { body = JSON.parse(body); } catch { }; 
+      return Promise.resolve({ statusCode, headers, result: body }) 
     }
 
-    post(opts, callback = () => {}) {
+    async post(opts) {
+      var Resp = null;
       const method = opts.method ? opts.method.toLocaleLowerCase() : 'post';
       // 如果指定了请求体, 但没指定`Content-Type`, 则自动生成
       if (opts.body && opts.headers && !opts.headers['Content-Type']) {
-        opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        opts.headers['Content-Type'] = 'application/json';
       }
       if (opts.headers) delete opts.headers['Content-Length'];
-      if (this.isSurge() || this.isLoon()) {
-        if (this.isSurge() && this.isNeedRewrite) {
-          opts.headers = opts.headers || {};
-          Object.assign(opts.headers, { 'X-Surge-Skip-Scripting': false });
-        }
-        $httpClient[method](opts, (err, resp, body) => {
-          if (!err && resp) {
-            resp.body = body;
-            resp.statusCode = resp.status;
+      try {
+        if (this.isQuanX()) {
+          this.log('in QuanX env')
+          opts.method = method;
+          if (this.isNeedRewrite) {
+            opts.opts = opts.opts || {};
+            Object.assign(opts.opts, { hints: false });
           }
-          callback(err, resp, body);
-        });
-      } else if (this.isQuanX()) {
-        opts.method = method;
-        if (this.isNeedRewrite) {
-          opts.opts = opts.opts || {};
-          Object.assign(opts.opts, { hints: false });
+          await $task.fetch(opts).then(t => {Resp = t }, e => { Resp = e.response });
+        } else if (this.isNode()) {
+          this.initGotEnv(opts);
+          const { url, ..._opts } = opts;
+          await this.got[method](url, _opts).then(t => { Resp = t }, e => { Resp = e.response })
         }
-        $task.fetch(opts).then(
-          (resp) => {
-            const { statusCode: status, statusCode, headers, body } = resp;
-            callback(null, { status, statusCode, headers, body }, body);
-          },
-          (err) => callback(err)
-        );
-      } else if (this.isNode()) {
-        this.initGotEnv(opts);
-        const { url, ..._opts } = opts;
-        this.got[method](url, _opts).then(
-          (resp) => {
-            const { statusCode: status, statusCode, headers, body } = resp;
-            callback(null, { status, statusCode, headers, body }, body);
-          },
-          (err) => {
-            const { message: error, response: resp } = err;
-            callback(error, resp, resp && resp.body);
-          }
-        );
-      }
+      } catch (e) {
+        if (e.name == 'TimeoutError') { 
+          this.log(`请求超时，重试第${count}次`); 
+        } else { 
+          this.log(`请求错误(${e.message})，重试第${count}次`); 
+        } 
+      };
+      
+      if (Resp == null) return Promise.resolve({ statusCode: -1, headers: null, result: null });
+      let { statusCode, headers, body } = Resp; 
+      if (body) try { body = JSON.parse(body); } catch { }; 
+      return Promise.resolve({ statusCode, headers, result: body }) 
     }
     /**
      *
