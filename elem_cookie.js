@@ -12,6 +12,7 @@ const $ = new Env('饿了么Cookie')
   const saved = `SID=${cookie.SID};cookie2=${cookie.cookie2}`
   if ($.setData(saved,'elmck')) {
     $.subt = `获取会话: 成功!`
+    $.log(JSON.stringify($request.headers.Cookie))
     $.log(saved)
   } else {
     $.subt = `获取会话: 失败!`
