@@ -1,4 +1,4 @@
-// ^https:\/\/htwkop\.xiaojukeji\.com\/gateway\?api=prado\.play\.common\.facade\.component\&.*
+// ^https:\/\/htwkop\.xiaojukeji\.com\/gateway\?api=htw\.m\.cos\.accountBalance\&.*
 const $ = new Env('青桔单车骑行金')
 $.signurlKey = 'signurl_xiaojukeji_coin'
 $.signheaderKey = 'signheader_xiaojukeji_coin'
@@ -38,8 +38,8 @@ function sign() {
       try {
         // $.log(data)
         let result = JSON.parse(data)
-        if (result.data.data.result) {
-          $.msg($.name, `签到成功`, `获得${result.data.data.dailySignReward.rightCount}个奖励金`)
+        if (result.data.balance) {
+          $.msg($.name, `查询签到金成功`, `共有${result.data.balance}个奖励金，300可兑换`)
         }
         else {
           $.msg($.name, `签到失败`, `${result.data.msg}`)
