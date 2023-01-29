@@ -1,4 +1,11 @@
-// ^https:\/\/htwkop\.xiaojukeji\.com\/gateway\?api=htw\.m\.cos\.accountBalance\&.*
+/******************************
+[rewrite_local]
+^https:\/\/htwkop\.xiaojukeji\.com\/gateway\?api=htw\.m\.cos\.accountBalance\&.* url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/xiaojukeji.js
+
+[mitm] 
+hostname = htwkop.xiaojukeji.com
+
+*******************************/
 const $ = new Env('青桔单车骑行金')
 $.signurlKey = 'signurl_xiaojukeji_coin'
 $.signheaderKey = 'signheader_xiaojukeji_coin'
