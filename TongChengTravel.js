@@ -13,4 +13,4 @@ hostname=wx.17u.cn
 var body = JSON.parse($request.body);
 body['isFromWindow'] = true;
 console.log('修改成功')
-$done({ body: body });
+$done({ body: JSON.stringify(body) });
