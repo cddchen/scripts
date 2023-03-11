@@ -6,26 +6,67 @@
 hostname = haagendazs.smarket.com.cn
 
 *******************************/
+// Import blueimp-md5 library
+// var md5 = require("blueimp-md5");
+// let sign_body = {
+//   "openId" : "oJlot5CB4967X-oegXcBC5n2w6bw",
+//   "mobile" : "13035631362",
+//   "sessionKey" : "3Ck+pxxDv2lTMF8ZehYpX2ibo1vcVqnwLrpBt3FMDVo=",
+//   "unionId" : "onoRB5gSM2rTr6vTnAp2osPhL6MI",
+//   "socialHubid" : "49E8oQ1kVM27UMaV",
+//   "sign" : "ab95370342e7a66cd292752c39692bee",
+//   "timestamp" : 1678158564633
+// }
+// const e = (new Date).getTime();
+// // const e = 1678158564633;
+// const i = "openId=" + sign_body["openId"] + "&unionId=" + sign_body["unionId"] + "&sessionKey=" + sign_body["sessionKey"] + "&timestamp=".concat(e)
+// const h = Array.from(i).sort().join("")
+// const g = md5("key=@D#DZ15$$ABCD&")
+// const r = md5(md5(h) + "," + g)
+// // this.log(r)
+// sign_body.timestamp = e
+// sign_body.sign = r
+// console.log(e)
+// console.log(r)
+
+
 const $ = new Env('哈根达斯')
 
 const envSplitor = ['`']
 const ckNames = ['HaagenDazs']
-const MAX_THREAD = 1
+const MAX_THREAD = 3
 const DEFAULT_TIMEOUT = 8000, DEFAULT_RETRY = 3;
 
+// let sign_body = {
+//   "openId" : "oJlot5CB4967X-oegXcBC5n2w6bw",
+//   "mobile" : "13035631362",
+//   "sessionKey" : "3Ck+pxxDv2lTMF8ZehYpX2ibo1vcVqnwLrpBt3FMDVo=",
+//   "unionId" : "onoRB5gSM2rTr6vTnAp2osPhL6MI",
+//   "socialHubid" : "49E8oQ1kVM27UMaV",
+//   "sign" : "ab95370342e7a66cd292752c39692bee",
+//   "timestamp" : 1678158564633
+// }
+// const e = (new Date).getTime();
+// // const e = 1678158564633
+// const i = "openId=" + sign_body["openId"] + "&unionId=" + sign_body["unionId"] + "&sessionKey=" + sign_body["sessionKey"] + "&timestamp=".concat(e)
+// const h = Array.from(i).sort().join("")
+// const g = $.md5("key=@D#DZ15$$ABCD&")
+// const r = $.md5($.md5(h) + "," + g)
+// // this.log(r)
+// sign_body.timestamp = e
+// sign_body.sign = r
+// console.log(e)
+// console.log(r)
 
 if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
   !(async () => {
-    const session = {}
-    session.headers = $request.headers;
-    session.body = $request.body;
+    const session = $request.body;
 
     let pre_session = $.getData(ckNames[0])
-    let log = pre_session.length == 0 ? JSON.stringify(session) : pre_session + envSplitor[0] + JSON.stringify(session)
+    let log = JSON.stringify(session)
     if ($.setData(log, ckNames[0])) {
         $.subt = `获取会话: 成功!`
-        $.log('headers:', $request.headers)
-        $.log('body:', $request.body)
+        $.log('session:', JSON.stringify(session))
       } else {
         $.subt = `获取会话: 失败!`
       }
@@ -41,6 +82,7 @@ class UserClass {
     this.index = $.userIdx++; 
     this.name = `账号${this.index}`
     this.cookie = JSON.parse(ck);
+    this.message = [`********${this.name}*******`];
   }
   log(msg, opt = {}) { 
     var m = '', n = $.userCount.toString().length;; 
@@ -48,53 +90,168 @@ class UserClass {
     if (this.name) m += `[${this.name}]`; 
     $.log(m + msg, opt); 
   } 
-  async sign() {
+  async get_token() {
     try {
-      let sign_body = JSON.parse(this.cookie.body)
-      const e = (new Date).getTime();
-      // const e = 1673336746360;
-      const i = "openId=" + sign_body["openId"] + "&unionId=" + sign_body["unionId"] + "&timestamp=".concat(e)
-      const h = Array.from(i).sort().join("")
-      const g = $.md5("key=!TDD7@DDZ6AGN3")
-      const r = $.md5($.md5(h) + "," + g)
-      // this.log(r)
-      sign_body.timestamp = e
-      sign_body.sign = r
-
       const headers = {
         Host: 'haagendazs.smarket.com.cn',
         Connection: 'keep-alive',
         'Content-Type': 'application/json',
         "Accept-Encoding": "gzip,compress,br,deflate",
         "User-Agent": 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f2f) NetType/WIFI Language/zh_CN miniProgram/wx73247c7819d61796',
-        Referer: 'https://servicewechat.com/wx3656c2a2353eb377/259/page-frame.html',
-        Authorization: "Bearer " + this.cookie.token
+        Referer: 'https://servicewechat.com/wx3656c2a2353eb377/258/page-frame.html'
+      }
+      
+      const body = {
+        "partner":"apitest","secret":"Ou0HT@0W6e","openid":"gh_68065de13ad5","app-id":"wx3656c2a2353eb377"
       }
       
       const url = {
-        url: 'https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn',
+        url: 'https://haagendazs.smarket.com.cn/v1/api/token',
         headers: headers,
-        body: JSON.stringify(sign_body)
+        body: JSON.stringify(body)
       }
-      this.log(JSON.stringify(url))
       let {result} = await $.post(url)
       this.log(JSON.stringify(result))
       let code = result?.code
       if (code == 0) {
-        $.notifyStr.push('签到成功，' + result?.msg)
+        this.log(`获取token成功：${result.data}`)
+        return Promise.resolve(result.data)
       } else {
-        $.notifyStr.push('签到失败，' + result?.msg)
+        this.log(`获取token失败：${result.msg}`)
+        return Promise.reject(`获取token失败：${result.msg}`)
       }
     } catch(e) {
       this.log(e)
-      $.notifyStr.push(`签到失败，${e}`)
+      return Promise.reject(`获取token出错：${e}` )
+    } finally {
+    }
+  }
+  async visitRecordsave(token) {
+    try {
+      const headers = {
+        Host: 'haagendazs.smarket.com.cn',
+        Connection: 'keep-alive',
+        'Content-Type': 'application/json',
+        "Accept-Encoding": "gzip,compress,br,deflate",
+        "User-Agent": 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f2f) NetType/WIFI Language/zh_CN miniProgram/wx73247c7819d61796',
+        Referer: 'https://servicewechat.com/wx3656c2a2353eb377/271/page-frame.html',
+        Authorization: 'Bearer ' + token
+      }
+
+      const body = {
+        "url": "\/pages\/index\/index"
+      }
+      
+      const url = {
+        url: 'https://haagendazs.smarket.com.cn/v1/api/wxapp/visitRecord/save',
+        headers: headers,
+        body: JSON.stringify(body)
+      }
+      let {result} = await $.post(url)
+      this.log(JSON.stringify(result))
+      let code = result?.code
+      if (code == 0) {
+        this.log(`visitRecord save成功：${result.msg}`)
+        return Promise.resolve(token)
+      } else {
+        this.log(`visitRecord save失败：${result.msg}`)
+        return Promise.reject('visitRecord save失败')
+      }
+    } catch(e) {
+      this.log(e)
+      return Promise.reject(`visitRecord save出错，${e}`)
+    } 
+  }
+  async save_login_record(token) {
+    try {
+      const headers = {
+        Host: 'haagendazs.smarket.com.cn',
+        Connection: 'keep-alive',
+        'Content-Type': 'application/json',
+        "Accept-Encoding": "gzip,compress,br,deflate",
+        "User-Agent": 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f2f) NetType/WIFI Language/zh_CN miniProgram/wx73247c7819d61796',
+        Referer: 'https://servicewechat.com/wx3656c2a2353eb377/258/page-frame.html',
+        Authorization: 'Bearer ' + token
+      }
+
+      const body = {
+        "unionId": this.cookie.unionId,
+        "openId": this.cookie.openId,
+        "source": ""
+      }
+      
+      const url = {
+        url: 'https://haagendazs.smarket.com.cn/v1/api/wxapp/relevant/saveLoginRecord',
+        headers: headers,
+        body: JSON.stringify(body)
+      }
+      let {result} = await $.post(url)
+      this.log(JSON.stringify(result))
+      let code = result?.code
+      if (code == 0) {
+        this.log(`保存登陆记录成功：${result.msg}`)
+        return Promise.resolve(token)
+      } else {
+        this.log(`保存登陆记录失败：${result.msg}`)
+        return Promise.reject('保存登陆记录失败')
+      }
+    } catch(e) {
+      this.log(e)
+      return Promise.reject(`保存登陆记录出错，${e}`)
+    } 
+  }
+  async sign(token) {
+    try {
+      let sign_body = this.cookie
+      const e = (new Date).getTime();
+      // const e = 1673336746360;
+      const i = "openId=" + sign_body["openId"] + "&unionId=" + sign_body["unionId"] + "&sessionKey=" + sign_body["sessionKey"] + "&timestamp=".concat(e)
+      const h = Array.from(i).sort().join("")
+      const g = $.md5("key=@D#DZ15$$ABCD&")
+      const r = $.md5($.md5(h) + "," + g)
+      // this.log(r)
+      sign_body.timestamp = e
+      sign_body.sign = r
+
+      const header = {
+        Host: 'haagendazs.smarket.com.cn',
+        Connection: 'keep-alive',
+        Authorization: "Bearer " + token,
+        'Content-Type': 'application/json',
+        "Accept-Encoding": "gzip,compress,br,deflate",
+        "User-Agent": 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.31(0x18001f37) NetType/4G Language/en',
+        Referer: 'https://servicewechat.com/wx3656c2a2353eb377/272/page-frame.html',
+      }
+      
+      const url = {
+        url: 'https://haagendazs.smarket.com.cn/v1/api/wxapp/daily/signIn',
+        headers: header,
+        body: JSON.stringify(sign_body)
+      }
+      // this.log(JSON.stringify(url))
+      let {result} = await $.post(url)
+      this.log(JSON.stringify(result))
+      let code = result?.code
+      if (code == 0) {
+        this.message.push('签到成功，' + result?.msg)
+      } else {
+        this.message.push('签到失败，' + result?.msg)
+      }
+    } catch(e) {
+      this.message.push('签到error，' + result?.msg)
     } finally {
       return Promise.resolve()
     }
   }
 
   async userTask() {
-    await this.sign();
+    await this.get_token()
+      .then(token => this.save_login_record(token))
+      .then(token => this.visitRecordsave(token))
+      .then(token => this.sign(token))
+      .catch(e => {
+        this.message.push(e)
+      })
   }
 }
 
@@ -104,7 +261,6 @@ class UserClass {
 })()
   .catch((e) => $.log(e))
   .finally(() => $.done())
-
 
 
 function Env(name, opts) {
@@ -188,6 +344,9 @@ function Env(name, opts) {
       await Promise.all(taskAll)
     }
     async showmsg() {
+      this.userList.forEach(user => {
+        this.notifyStr = this.notifyStr.concat(user.message)
+      });
       if (!this.notifyStr.length) return;
       var notify = this.isNode ? require('./sendNotify') : '';
       this.log('\n============== 推送 ==============');
@@ -453,7 +612,7 @@ function Env(name, opts) {
           await $task.fetch(opts).then(t => {Resp = t }, e => { Resp = e.response });
         } else if (this.isNode()) {
           this.initGotEnv(opts);
-          this.got(opts)
+          await this.got(opts)
             .on('redirect', (resp, nextOpts) => {
               try {
                 if (resp.headers['set-cookie']) {
@@ -634,6 +793,20 @@ function Env(name, opts) {
 
     formdata2object = function (str) {
       return JSON.parse('{"' + str.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) })
+    }
+
+    padStr(num, length, opt = {}) {
+      let padding = opt.padding || '0'; let mode = opt.mode || 'l'; let numStr = String(num);
+      let numPad = (length > numStr.length) ? (length - numStr.length) : 0; let pads = '';
+      for (let i = 0; i < numPad; i++) {
+        pads += padding;
+      }
+      if (mode == 'r') {
+        numStr = numStr + pads;
+      } else {
+        numStr = pads + numStr;
+      }
+      return numStr;
     }
     /**
      * 系统通知
