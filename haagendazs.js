@@ -116,7 +116,6 @@ class UserClass {
     } catch (e) {
       this.log(e)
       return Promise.reject(`获取token出错：${e}`)
-    } finally {
     }
   }
   async visitRecordsave(token) {
@@ -223,7 +222,7 @@ class UserClass {
       }
       // this.log(JSON.stringify(url))
       let { result } = await $.post(url)
-      this.log(JSON.stringify(result))
+      this.log(111)
       let code = result?.code
       if (code == 0) {
         this.message.push('签到成功，' + result?.msg)
@@ -237,6 +236,19 @@ class UserClass {
   }
 
   async userTask() {
+    let sign_body = JSON.parse("{\"unionId\":\"onoRB5gSM2rTr6vTnAp2osPhL6MI\",\"openId\":\"oJlot5CB4967X-oegXcBC5n2w6bw\",\"socialHubid\":\"49E8oQ1kVM27UMaV\",\"mobile\":\"13035631362\",\"sign\":\"008a31b79f573e84e4a29ac138a1442b\",\"timestamp\":1678582610493,\"sessionKey\":\"/ervH9UghF14UPP6JWrIaPOfyIIwmaRXusdjmQorVdY=\"}")
+    // "{\"unionId\":\"onoRB5gSM2rTr6vTnAp2osPhL6MI\",\"openId\":\"oJlot5CB4967X-oegXcBC5n2w6bw\",\"socialHubid\":\"49E8oQ1kVM27UMaV\",\"mobile\":\"13035631362\",\"sign\":\"f1dea25c8e9aca289df4df97807a2039\",\"timestamp\":1678694891047,\"sessionKey\":\"/ervH9UghF14UPP6JWrIaPOfyIIwmaRXusdjmQorVdY=\"}"
+    // const e = (new Date).getTime();
+    const e = 1678694891047
+    const i = "openId=" + sign_body["openId"] + "&unionId=" + sign_body["unionId"] + "&sessionKey=" + sign_body["sessionKey"] + "&timestamp=".concat(e)
+    const h = Array.from(i).sort().join("")
+    const g = $.md5("key=@D#DZ15$$ABCD&")
+    const r = $.md5($.md5(h) + "," + g)
+    // this.log(r)
+    sign_body.timestamp = e
+    sign_body.sign = r
+    console.log(e)
+    console.log(r)
     await this.get_token()
       .then(token => this.save_login_record(token))
       .then(token => this.sign(token))
