@@ -135,7 +135,6 @@ if (url.indexOf(path2) != -1 || url.indexOf(path4) != -1) {
             if (detail[0] == "useJXOrigin") detail[0] = detail[1];
             let convertmsg = detail[0].convertURL ? detail[0].msg : detail[0];
             msg += convertmsg ? convertmsg : "";
-            msg += detail[1];
             let oprnUrl = detail[0].convertURL ? detail[0].convertURL : "";
             $tool.notify("京东价格/返利", "", msg, oprnUrl);
         })
