@@ -122,7 +122,7 @@ if (url.indexOf(path2) != -1 || url.indexOf(path4) != -1) {
             : commodity_info.data.property.shareUrl;
     autoScheme = url.indexOf(path2h) != -1 ? "openApp.jdHealth" : "openjd";
     //const scheme = !autoChoose ? chooseScheme : url.indexOf(path4) != -1 ? "openapp.jdpingou" : url.indexOf(path2h) != -1 ? "openApp.jdHealth" : url.indexOf("lite_"+path3) != -1 ? "openjdlite" : "openjd";
-    let getHistory = request_history_price(shareUrl);
+    //let getHistory = request_history_price(shareUrl);
     let convertURL = "";
     let jxconvertURL = "";
     if (useConvert) {
