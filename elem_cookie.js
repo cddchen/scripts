@@ -8,16 +8,18 @@ hostname = h5.ele.me
 const $ = new Env('饿了么Cookie')
 !(async () => {
   const cookie = $.str2json($request.headers.Cookie);
-  if (!cookie.SID || !cookie.cookie2) return;
-  const saved = `SID=${cookie.SID};cookie2=${cookie.cookie2}`
+  if (!cookie.SID || !cookie.cookie2 || cookie.USERID || cookie._tb_token_) return;
+  const saved = `SID=${cookie.SID};USERID=${cookie.USERID};_tb_token_=${cookie._tb_token_};cookie2=${cookie.cookie2};`
   if ($.setData(saved,'elmck')) {
     $.subt = `获取会话: 成功!`
+    $.subtt = saved
     $.log(JSON.stringify($request.headers.Cookie))
     $.log(saved)
   } else {
     $.subt = `获取会话: 失败!`
+    $.subtt = ''
   }
-  $.msg($.name, $.subt, '')
+  $.msg($.name, $.subt, $.subtt)
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
