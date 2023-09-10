@@ -1,6 +1,6 @@
 /******************************
 [rewrite_local]
-^https://openapi-gateway\.hotmaxx\.cn/member/sign/signIn$ url script-request-body HotMax.js
+^https://openapi-gateway\.hotmaxx\.cn/member/sign/signIn$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/HotMax.js
 
 [mitm] 
 hostname = openapi-gateway.hotmaxx.cn
