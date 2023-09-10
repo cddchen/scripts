@@ -19,7 +19,7 @@ if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
     session['body'] = $request.body
 
     let pre_session = $.getData(ckNames[0])
-    let log = SON.stringify(session)
+    let log = JSON.stringify(session)
     if ($.setData(log, ckNames[0])) {
       $.subt = `获取会话: 成功!`
       $.log('session:', log)
