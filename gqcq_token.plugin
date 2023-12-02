@@ -1,0 +1,13 @@
+#!name = 广汽传祺获取Token
+#!desc = 广汽传祺获取App Token，签到时通知，7天有效期。
+#!openUrl = 
+#!author = cddchen
+#!homepage = https://github.com/cddchen/scripts
+#!icon = https://www.gacmotor.com/static/assets/imgs/footer-icon-02.png
+#!date = 2023-12-02 12:00:23
+
+[Script]
+http-response ^https:\/\/next\.gacmotor\.com\/app\/app-api\/sign\/submit$ script-path = https://raw.githubusercontent.com/cddchen/scripts/main/gqcq_token.js, requires-body = true, tag = 广汽传祺token
+
+[Mitm]
+hostname = next.gacmotor.com
