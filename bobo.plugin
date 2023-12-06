@@ -7,7 +7,7 @@
 #!date = 2023-12-02 12:00:23
 
 [Script]
-http-response ^https:\/\/e\.boc\.cn\/ezcs-zone\/game$ script-path = https://raw.githubusercontent.com/CreamK/script/master/script/boc.js, requires-body = true, tag = 中行bobo注入vConsole
+http-response ^https:\/\/e\.boc\.cn\/ezcs-zone\/game\/$ script-path = https://raw.githubusercontent.com/CreamK/script/master/script/boc.js, requires-body = true, tag = 中行bobo注入vConsole
 
 [Mitm]
 hostname = e.boc.cn
