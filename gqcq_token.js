@@ -14,16 +14,18 @@ const MAX_THREAD = 3
 
 !(async () => {
   $.log($response.body)
-  const refreshToken = JSON.parse($response.body).data.refreshToken
+  const refreshToken = JSON.parse($response.body)?.data?.refreshToken
 
-  const html = Buffer.from(`<html>${refreshToken}</html>`).toString('base64');
+  
 
-  if (token) {
+  if (refreshToken) {
     $.subt = `refreshToken: ${refreshToken}`
+    $.subtt = $.Base64Encode(`<html>${refreshToken}</html>`)
   } else {
     $.subt = `出错啦🥵`
+    $.subtt = $.Base64Encode(`<html>${$response.body}</html>`)
   }
-  $.msg($.name, '获取refreshToken详情', $.subt, `data:text/html;base64,${html}`)
+  $.msg($.name, '获取refreshToken详情', $.subt, `data:text/html;base64,${$.subtt}`)
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -523,6 +525,25 @@ function Env(name, opts) {
         b = ii(b, c, d, a, x[i + 9], 21, -343485551); a = ad(a, olda); b = ad(b, oldb); c = ad(c, oldc); d = ad(d, oldd);
       }
       return rh(a) + rh(b) + rh(c) + rh(d);
+    }
+
+    Base64Encode(str) {
+      const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      let result = '';
+  
+      for (let i = 0; i < str.length; i += 3) {
+          const chunk = str.charCodeAt(i) << 16 | (i + 1 < str.length ? str.charCodeAt(i + 1) << 8 : 0) | (i + 2 < str.length ? str.charCodeAt(i + 2) : 0);
+  
+          for (let j = 0; j < 4; j++) {
+              if (i * 8 + j * 6 <= str.length * 8) {
+                  result += base64Chars.charAt((chunk >>> 6 * (3 - j)) & 0x3F);
+              } else {
+                  result += '=';
+              }
+          }
+      }
+  
+      return result;
     }
 
     json2str(obj, c, encode = false) {
