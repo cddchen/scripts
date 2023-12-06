@@ -12,24 +12,21 @@ const envSplitor = ['#']
 const ckNames = ['gqcqCookie']
 const MAX_THREAD = 3
 
-if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
-  !(async () => {
-    const refreshToken = $request.headers?.data.refreshToken
+!(async () => {
+  $.log($response.body)
+  const refreshToken = JSON.parse($response.body).data.refreshToken
 
-    const html = Buffer.from(`<html>${refreshToken}</html>`).toString('base64');
+  const html = Buffer.from(`<html>${refreshToken}</html>`).toString('base64');
 
-    if (token) {
-      $.subt = `refreshToken: ${refreshToken}`
-    } else {
-      $.subt = `出错啦🥵`
-    }
-    $.msg($.name, '获取refreshToken详情', $.subt, `data:text/html;base64,${html}`)
-  })()
-    .catch((e) => $.logErr(e))
-    .finally(() => $.done())
-  return
-}
-
+  if (token) {
+    $.subt = `refreshToken: ${refreshToken}`
+  } else {
+    $.subt = `出错啦🥵`
+  }
+  $.msg($.name, '获取refreshToken详情', $.subt, `data:text/html;base64,${html}`)
+})()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done())
 
 function Env(name, opts) {
   class Http {
