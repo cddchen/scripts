@@ -1,6 +1,6 @@
 /******************************
 [rewrite_local]
-^https:\/\/next\.gacmotor\.com\/app\/app-api\/sign\/submit$ url script-request-body https://raw.githubusercontent.com/cddchen/scripts/main/gqcq_token.js
+^https:\/\/next\.gacmotor\.com\/app\/app-api\/sign\/submit$ url script-response-body https://raw.githubusercontent.com/cddchen/scripts/main/gqcq_token.js
 
 [mitm] 
 hostname = next.gacmotor.com
@@ -14,14 +14,16 @@ const MAX_THREAD = 3
 
 if ((typeof $request !== 'undefined') && $request.method != 'OPTIONS') {
   !(async () => {
-    const token = $request.headers?.apptoken;
+    const refreshToken = $request.headers?.data.refreshToken
+
+    const html = Buffer.from(`<html>${refreshToken}</html>`).toString('base64');
 
     if (token) {
-      $.subt = `token: ${token}`
+      $.subt = `refreshToken: ${refreshToken}`
     } else {
       $.subt = `出错啦🥵`
     }
-    $.msg($.name, $.subt, token ?? '')
+    $.msg($.name, '获取refreshToken详情', $.subt, `data:text/html;base64,${html}`)
   })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
