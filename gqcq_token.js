@@ -1,6 +1,6 @@
 /******************************
 [rewrite_local]
-^https:\/\/next\.gacmotor\.com\/app\/app-api\/sign\/submit$ url script-response-body https://raw.githubusercontent.com/cddchen/scripts/main/gqcq_token.js
+^https:\/\/next\.gacmotor\.com\/app\/app-api\/login\/loginBySms$ url script-response-body https://raw.githubusercontent.com/cddchen/scripts/main/gqcq_token.js
 
 [mitm] 
 hostname = next.gacmotor.com
