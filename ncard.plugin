@@ -1,0 +1,14 @@
+#!name = NCard注入vConsole
+#!desc = NCard注入vConsole
+#!openUrl = 
+#!author = cddchen
+#!homepage = https://github.com/cddchen/scripts
+#!icon = https://www.gacmotor.com/static/assets/imgs/footer-icon-02.png
+#!date = 2023-12-02 12:00:23
+
+[Script]
+http-response ^https:\/\/82539\.activity-28\.m\.duiba\.com\.cn\/projectx\/pede4a542\/index.html script-path = https://raw.githubusercontent.com/CreamK/script/master/script/boc.js, requires-body = true, tag = NCard注入vConsole
+
+[Mitm]
+hostname = 82539.activity-28.m.duiba.com.cn
+
