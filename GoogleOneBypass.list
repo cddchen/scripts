@@ -1,6 +1,6 @@
 # 内容：googleoneip
 # 数量：81条
-IP-CIDR,8.8.8.8
+IP-CIDR,8.8.8.8/32
 IP-CIDR,64.9.224.0/23
 IP-CIDR,64.9.228.0/23
 IP-CIDR,64.9.236.0/22
