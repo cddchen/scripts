@@ -1,6 +1,6 @@
 var objc = JSON.parse($response.body);
 
-objc.data.permissions.push("ADDRESS")
+objc.data.permissions.push("CONTACT_ADDRESS")
 
 objc = JSON.stringify(objc)
 console.log(objc)
