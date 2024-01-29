@@ -1,6 +1,6 @@
 var objc = JSON.parse($response.body);
 
-objc.data.permissions.push("BILLING_ADDRESS")
+objc.data.permissions.push("MPP_BILLING_ADDRESS")
 // objc.data.permissions.pop()
 
 objc = JSON.stringify(objc)
