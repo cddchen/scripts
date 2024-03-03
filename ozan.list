@@ -1,8 +1,6 @@
 DOMAIN-SUFFIX,bkm.com.tr
 DOMAIN-SUFFIX,ozan.com
-DOMAIN-SUFFIX,netmera.com
 DOMAIN-SUFFIX,ozanodeme.com.tr
-DOMAIN-SUFFIX,metowolf.com
 IP-CIDR,104.18.20.0/24
 IP-CIDR,104.18.21.0/24
 IP-CIDR,188.114.99.0/24
