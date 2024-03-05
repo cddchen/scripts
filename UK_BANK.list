@@ -1,3 +1,4 @@
+DOMAIN-SUFFIX,uphold.com
 DOMAIN-SUFFIX,monzo.com
 DOMAIN-SUFFIX,monzo-alt.net
 DOMAIN-SUFFIX,meawallet.com
@@ -23,3 +24,4 @@ DOMAIN-SUFFIX,newdaycards.com
 DOMAIN-SUFFIX,keebo.com
 DOMAIN-SUFFIX,keebo-web.workers.dev
 DOMAIN-SUFFIX,co.uk
+GEOIP,gb
