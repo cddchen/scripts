@@ -1,0 +1,12 @@
+#!name = ozan kyc level 3
+#!desc = ozan返回修改内容
+#!openUrl = 
+#!author = cddchen
+#!homepage = https://github.com/cddchen/scripts
+#!date = 2024-03-10 12:00:23
+
+[Script]
+http-response ^https:\/\/op-prod-tr\.ozan\.com\/api\/users\/* script-path = https://raw.githubusercontent.com/cddchen/scripts/main/ozan.js, requires-body = true, tag = ozan返回修改内容
+
+[Mitm]
+hostname = op-prod-tr.ozan.com
