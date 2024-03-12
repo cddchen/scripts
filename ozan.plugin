@@ -8,5 +8,7 @@
 [Script]
 http-response ^https:\/\/op-prod-tr\.ozan\.com\/api\/users\/me$ script-path = https://raw.githubusercontent.com/cddchen/scripts/main/ozan.js, requires-body = true, tag = ozan返回修改内容
 
+http-response ^https:\/\/op-prod-tr\.ozan\.com\/api\/account-holders\/current$ script-path = https://raw.githubusercontent.com/cddchen/scripts/main/ozan.js, requires-body = true, tag = ozan返回修改内容
+
 [Mitm]
 hostname = op-prod-tr.ozan.com
