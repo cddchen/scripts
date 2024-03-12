@@ -1,6 +1,7 @@
 var objc = JSON.parse($response.body);
 
-objc?.accountHolderUserAssignments?.kycStatus = "KYC_LEVEL_3"
+if (objc?.accountHolderUserAssignments?.kycStatus)
+    objc?.accountHolderUserAssignments?.kycStatus = "KYC_LEVEL_3"
 objc?.kycStatus = "KYC_LEVEL_3"
 
 objc = JSON.stringify(objc)
