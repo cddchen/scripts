@@ -1,0 +1,12 @@
+#!name = vbtv premium
+#!desc = vbtv会员
+#!openUrl = 
+#!author = cddchen
+#!homepage = https://github.com/cddchen/scripts
+#!date = 2024-04-17 12:00:23
+
+[Script]
+http-response ^https:\/\/dce-frontoffice\.imggaming\.com\/api\/v2\/licence$ script-path = https://raw.githubusercontent.com/cddchen/scripts/main/vbtv.js, requires-body = true, tag = vbtv premium
+
+[Mitm]
+hostname = dce-frontoffice.imggaming.com
