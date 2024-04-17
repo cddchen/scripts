@@ -1,7 +1,6 @@
 var objc = JSON.parse($response.body);
-objc[0].license.contentDownload.permission = "ALLOWED"
-objc[0].license.type = "STANDARD"
-objc[0].name = "MONTHLY PREMIUM"
+objc[0].status = "INACTIVE"
+objc[0].licenceStatus.status = "INACTIVE"
 
 objc[3].status = "ACTIVE"
 objc[3].licenceStatus.status = "ACTIVE"
