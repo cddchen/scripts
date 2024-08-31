@@ -1,0 +1,15 @@
+#!name = peakwatch premium
+#!desc = peakwatch会员
+#!openUrl = 
+#!author = cddchen
+#!homepage = https://github.com/cddchen/scripts
+#!date = 2024-08-31 15:00:23
+
+[Script]
+http-response ^https:\/\/firebase-settings\.crashlytics\.com\/spi\/v2\/platforms\/ios\/gmp\/.*?\/settings\? script-path = https://raw.githubusercontent.com/cddchen/scripts/main/peakwatch.js, requires-body = true, tag = peakwatch crashlytics
+
+http-response ^https:\/\/api\.peakwatch\.co\/api\/v1\/check$ script-path = https://raw.githubusercontent.com/cddchen/scripts/main/peakwatch.js, requires-body = true, tag = peakwatch check
+
+[Mitm]
+hostname = firebase-settings.crashlytics.com
+hostname = api.peakwatch.co
