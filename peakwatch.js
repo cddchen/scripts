@@ -11,6 +11,7 @@ if (objc.features) {
 if (objc.content) {
   objc.content.isSubscriber = true
   objc.content.needForceUpgrade = false
+  objc.content.productId = "peakwatch_pro_yearly_new"
 }
 
 console.log(JSON.stringify(objc));
