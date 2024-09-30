@@ -10,5 +10,7 @@ http-response ^https:\/\/firebase-settings\.crashlytics\.com\/spi\/v2\/platforms
 
 http-response ^https:\/\/api\.peakwatch\.co\/api\/v1\/check$ script-path = https://raw.githubusercontent.com/cddchen/scripts/main/peakwatch.js, requires-body = true, tag = peakwatch check
 
+http-response ^https:\/\/buy\.itunes\.apple\.com\/verifyReceipt script-path = https://raw.githubusercontent.com/89996462/Quantumult-X/main/ycdz/XSHRL.js, requires-body = true, tag = peakwatch verifyReceipt
+
 [Mitm]
-hostname = api.peakwatch.co, firebase-settings.crashlytics.com
+hostname = api.peakwatch.co, firebase-settings.crashlytics.com, buy.itunes.apple.com
