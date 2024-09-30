@@ -15,5 +15,5 @@ if (objc.content) {
 
 console.log(JSON.stringify(objc));
 $done({
-  body: objc,
+  body: JSON.stringify(objc),
 });
