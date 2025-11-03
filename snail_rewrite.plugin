@@ -1,0 +1,12 @@
+#!name = 蜗牛移动充值复写
+#!desc = 蜗牛移动不给充年包
+#!openUrl = 
+#!author = cddchen
+#!homepage = https://github.com/cddchen/scripts
+#!date = 2025-11-03 17:00:23
+
+[Script]
+http-response ^https:\/\/cloud\.snailmobile\.com\/crm\/resource\/queryPackageById script-path = https://raw.githubusercontent.com/cddchen/scripts/main/peakwatch.js, requires-body = true, tag = peakwatch check
+
+[Mitm]
+hostname = cloud.snailmobile.com
