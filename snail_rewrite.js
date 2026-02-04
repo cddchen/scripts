@@ -1,7 +1,7 @@
 const objc = {
     "code": 0,
     "data": {
-        "balanceTypeId": "80005",
+        "balanceTypeId": "20003",
         "balanceTypeName": "蜗牛nmsl",
         "businessType": "CN",
         "channel": [
