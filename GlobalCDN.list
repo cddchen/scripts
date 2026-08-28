@@ -23,7 +23,15 @@ DOMAIN-SUFFIX,packages.cloud.google.com
 DOMAIN-SUFFIX,fonts.googleapis.com
 DOMAIN-SUFFIX,fonts.gstatic.com
 DOMAIN-SUFFIX,images.unsplash.com
-DOMAIN-SUFFIX,cdn.oaistatic.com
+DOMAIN-SUFFIX,oaistatic.com
+DOMAIN-SUFFIX,oaiusercontent.com
+DOMAIN-SUFFIX,cdn.openai.com
+DOMAIN-SUFFIX,cdn.openaimerge.com
+DOMAIN-SUFFIX,assets.claude.ai
+DOMAIN-SUFFIX,claudeusercontent.com
+DOMAIN-SUFFIX,abs.twimg.com
+DOMAIN-SUFFIX,pbs.twimg.com
+DOMAIN-SUFFIX,video.twimg.com
 DOMAIN-SUFFIX,download.epicgames.com
 DOMAIN-SUFFIX,download2.epicgames.com
 DOMAIN-SUFFIX,fastly-download.epicgames.com
