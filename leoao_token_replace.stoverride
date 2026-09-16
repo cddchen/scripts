@@ -20,5 +20,5 @@ http:
 
 script-providers:
   leoao_token_replace:
-    url: https://raw.githubusercontent.com/your-username/scripts/main/packages/leoao-token/leoao-token.js
+    url: https://raw.githubusercontent.com/cddchen/scripts/refs/heads/main/leoao-token.js
     interval: 86400
