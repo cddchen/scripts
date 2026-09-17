@@ -1,0 +1,30 @@
+http:
+  mitm:
+    - 'api.shayujizhang.com'
+  script:
+    - name: tally-vip-override
+      match: ^https:\/\/api\.shayujizhang\.com\/account\/grant\/vip\/detail\/
+      type: response
+      require-body: true
+      timeout: 5
+
+script-providers:
+  tally-vip-override:
+    interval: 86400
+    payload: |
+      try {
+        let obj = JSON.parse($response.body);
+        if (obj && obj.data) {
+          obj.data.is_buy = 1;
+          obj.data.offcial_vip = {
+            days: 9999,
+            finish_date_ios: "2099-12-31",
+            auto_buy: 1
+          };
+          obj.data.trial_vip = { days: 0, finish_date_ios: "" };
+          obj.data.ad_vip = { days: 0, finish_date_ios: "", auto_buy: 0 };
+        }
+        $done({ body: JSON.stringify(obj) });
+      } catch (e) {
+        $done({});
+      }
