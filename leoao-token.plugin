@@ -1,0 +1,12 @@
+#!name=乐刻健身 Token 替换与安全重签
+#!desc=自动替换 LeoaoApp 的 sso-token，并基于客户端原生 LKHS 算法联动重新生成 lk-safe1 与 lk-safe2 签名，防止换号报错
+#!author=cdd
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Fitness.png
+#!tag=实用工具
+#!input=sso_token=YOUR_NEW_SSO_TOKEN_HERE
+
+[MITM]
+hostname = lens.leoao.com
+
+[Script]
+http-request ^https:\/\/lens\.leoao\.com\/ script-path=https://raw.githubusercontent.com/cddchen/scripts/refs/heads/main/leoao-token.js, requires-body=true, tag=乐刻健身 Token 替换与安全重签, timeout=10, argument="sso_token=YOUR_NEW_SSO_TOKEN_HERE"
